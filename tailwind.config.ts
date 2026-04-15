@@ -43,21 +43,23 @@ const config: Config = {
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",
         ring: "hsl(var(--ring))",
-        // Custom colors for FLOW∞Grace
+        // Custom colors for Miho Okubo
         sage: {
           DEFAULT: "#8FAF8A",
-          light: "#EAF0E9",
+          light: "#EDF2EC",
+          lighter: "#F5F8F4",
           deep: "#7A9E75",
+          dark: "#5A7A56",
         },
-        rose: {
+        coral: {
           DEFAULT: "#C9827A",
-          light: "#F5EAE9",
-          dark: "#b86e66",
+          light: "#F5ECEA",
+          dark: "#B86E66",
         },
-        beige: {
-          DEFAULT: "#C4A882",
-          light: "#F7F4EE",
-          base: "#EFEBE0",
+        cream: {
+          DEFAULT: "#F5F0E6",
+          light: "#FAF8F4",
+          dark: "#E8E0D0",
         },
       },
       fontFamily: {

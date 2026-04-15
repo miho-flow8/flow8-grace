@@ -1,33 +1,33 @@
 "use client";
 
 import { useState } from "react";
-import { Plus } from "lucide-react";
+import { ChevronDown } from "lucide-react";
 
 const faqs = [
   {
-    question: "IT苦手でも大丈夫ですか？",
+    question: "大丈夫です！大歓迎です？",
     answer:
       "はい、大丈夫です。LP制作からLINE設定、GAS自動化まで、すべてこちらで構築しますので、専門知識は一切不要です。操作が必要な場合も、画面共有でサポートしますのでご安心ください。",
   },
   {
-    question: "どのくらいの期間で完成しますか？",
+    question: "個人からの相談も可能ですか？",
     answer:
-      "プランによって異なりますが、LINEスタートプランは約2週間、集客導線構築プランは約1〜2ヶ月、まるごとお任せプランは約2〜3ヶ月を目安にしています。",
+      "もちろん可能です。個人事業主の方、これから起業を考えている方、副業で始めたい方など、どなたでもお気軽にご相談ください。",
   },
   {
-    question: "分割払いはできますか？",
+    question: "対面での面談は可能ですか？",
     answer:
-      "はい、可能です。2回〜6回の分割に対応しております。詳しくは無料相談時にご案内いたします。",
+      "基本的にはオンライン（Zoom）での対応となりますが、東京近郊の場合は対面での面談も可能です。詳しくはお問い合わせください。",
   },
   {
-    question: "サポート期間終了後はどうなりますか？",
+    question: "相談内容がまとまっていなくても大丈夫ですか？",
     answer:
-      "サポート期間中に自走できる状態を目指して構築・レクチャーしますので、卒業後も安心して運用いただけます。追加サポートが必要な場合は、別途ご相談ください。",
+      "大丈夫です。「何から始めればいいか分からない」という状態からでも、一緒に整理していきますのでご安心ください。",
   },
   {
-    question: "メンタルブロック解除って何ですか？",
+    question: "お支払い方法は何がありますか？",
     answer:
-      "「売ることへの罪悪感」「値上げへの恐怖」「自分には価値がないという思い込み」など、売れない原因となっている内側のブロックを言語化し、書き換えていくセッションです。",
+      "銀行振込、クレジットカード決済に対応しています。分割払いも2回〜6回まで可能です。詳しくは無料相談時にご案内いたします。",
   },
 ];
 
@@ -35,46 +35,44 @@ export function FAQSection() {
   const [openIndex, setOpenIndex] = useState<number | null>(null);
 
   return (
-    <section id="faq" className="py-24 bg-background">
-      <div className="max-w-[1100px] mx-auto px-5 md:px-10">
-        {/* Header */}
-        <div className="text-center mb-14">
-          <h2 className="text-2xl md:text-4xl font-light text-rose mb-2">
-            よくある
-            <span className="border-b-2 border-rose pb-0.5">ご質問</span>
+    <section id="faq" className="py-16 md:py-24 bg-white">
+      <div className="max-w-3xl mx-auto px-4 sm:px-6">
+        {/* Section Title */}
+        <div className="text-center mb-12">
+          <h2 className="text-xl md:text-2xl lg:text-3xl font-medium text-foreground">
+            よくあるご質問
           </h2>
-          <span className="text-[11px] tracking-[0.25em] text-muted-foreground uppercase font-mono">
-            FAQ
-          </span>
         </div>
 
         {/* FAQ List */}
-        <div className="max-w-[760px] mx-auto flex flex-col gap-3.5">
+        <div className="space-y-3">
           {faqs.map((faq, index) => (
             <div
               key={index}
-              className="bg-white rounded-2xl overflow-hidden shadow-sm"
+              className="bg-cream rounded-xl overflow-hidden"
             >
               <button
                 onClick={() => setOpenIndex(openIndex === index ? null : index)}
-                className="w-full flex items-center gap-3.5 px-7 py-5 text-left cursor-pointer select-none"
+                className="w-full flex items-center justify-between gap-4 px-5 md:px-6 py-4 text-left"
               >
-                <span className="w-[30px] h-[30px] bg-rose text-white rounded-full flex items-center justify-center font-serif text-lg font-semibold flex-shrink-0">
-                  Q
-                </span>
-                <span className="text-[15px] font-medium flex-1 leading-relaxed">
-                  {faq.question}
-                </span>
-                <Plus
-                  className={`w-5 h-5 text-muted-foreground flex-shrink-0 transition-transform duration-300 ${
-                    openIndex === index ? "rotate-45 text-rose" : ""
+                <div className="flex items-center gap-3">
+                  <span className="flex-shrink-0 w-7 h-7 bg-coral text-white rounded-full flex items-center justify-center text-sm font-medium">
+                    Q
+                  </span>
+                  <span className="text-sm md:text-[15px] font-medium text-foreground">
+                    {faq.question}
+                  </span>
+                </div>
+                <ChevronDown
+                  className={`w-5 h-5 text-foreground/50 flex-shrink-0 transition-transform duration-200 ${
+                    openIndex === index ? "rotate-180" : ""
                   }`}
                 />
               </button>
 
               {openIndex === index && (
-                <div className="px-7 pb-5 pl-[72px]">
-                  <p className="text-sm leading-relaxed text-muted-foreground">
+                <div className="px-5 md:px-6 pb-4 pl-[52px] md:pl-[60px]">
+                  <p className="text-sm text-foreground/70 leading-relaxed">
                     {faq.answer}
                   </p>
                 </div>

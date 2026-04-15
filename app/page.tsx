@@ -4,12 +4,12 @@ import { ProblemSection } from "@/components/sections/problem";
 import { SolutionSection } from "@/components/sections/solution";
 import { DifferenceSection } from "@/components/sections/difference";
 import { BeforeAfterSection } from "@/components/sections/before-after";
-import { CTABanner } from "@/components/sections/cta-banner";
+import { ServiceFlowSection } from "@/components/sections/service-flow";
 import { ProfileSection } from "@/components/sections/profile";
-import { ReasonSection } from "@/components/sections/reason";
+import { CTABanner } from "@/components/sections/cta-banner";
 import { ServiceSection } from "@/components/sections/service";
-import { PriceSection } from "@/components/sections/price";
 import { FAQSection } from "@/components/sections/faq";
+import { FinalCTASection } from "@/components/sections/final-cta";
 import { Footer } from "@/components/footer";
 
 export default function Home() {
@@ -22,15 +22,12 @@ export default function Home() {
         <SolutionSection />
         <DifferenceSection />
         <BeforeAfterSection />
-        <CTABanner variant="rose" />
+        <ServiceFlowSection />
         <ProfileSection />
-        <ReasonSection />
+        <CTABanner variant="coral" />
         <ServiceSection />
-        <PriceSection />
         <FAQSection />
-        <section id="contact">
-          <CTABanner variant="dark" />
-        </section>
+        <FinalCTASection />
       </main>
       <Footer />
     </>

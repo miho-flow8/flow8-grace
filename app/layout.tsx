@@ -24,11 +24,11 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  title: "FLOW∞Grace | 売れない原因を言語化し、心と仕組み、両方から売れる自分をつくる。",
+  title: "Miho Okubo | 売れない原因を言語化し、心と仕組み、両方から売れる自分をつくる。",
   description:
     "AIの効率と、人のぬくもりを掛け合わせた「愛のあるWeb制作」を提供しています。LP・LINE・GASの仕組みを整える前に、「売れない理由」を一緒に言語化しましょう。",
   openGraph: {
-    title: "FLOW∞Grace | 売れない原因を言語化し、心と仕組み、両方から売れる自分をつくる。",
+    title: "Miho Okubo | 売れない原因を言語化し、心と仕組み、両方から売れる自分をつくる。",
     description:
       "AIの効率と、人のぬくもりを掛け合わせた「愛のあるWeb制作」を提供しています。",
     type: "website",
@@ -37,7 +37,7 @@ export const metadata: Metadata = {
 };
 
 export const viewport: Viewport = {
-  themeColor: "#EFEBE0",
+  themeColor: "#FFFFFF",
   width: "device-width",
   initialScale: 1,
 };

@@ -3,7 +3,7 @@ import Link from "next/link";
 
 export function HeroSection() {
   return (
-    <section id="hero" className="relative min-h-screen flex items-center justify-center overflow-hidden pt-16">
+    <section className="relative min-h-screen flex items-center justify-center pt-14">
       {/* Background Image */}
       <div className="absolute inset-0">
         <Image
@@ -13,21 +13,13 @@ export function HeroSection() {
           priority
           className="object-cover"
         />
-        <div className="absolute inset-0 bg-gradient-to-b from-sage/55 via-sage-deep/45 to-beige-base/70" />
+        <div className="absolute inset-0 bg-gradient-to-b from-white/20 via-transparent to-white/30" />
       </div>
 
       {/* Content */}
-      <div className="relative z-10 text-center px-6 py-20 max-w-[860px] mx-auto">
-        {/* Tag */}
-        <div className="inline-flex items-center gap-2 bg-white/30 backdrop-blur-sm border border-white/50 rounded-full px-5 py-1.5 mb-8">
-          <span className="w-1.5 h-1.5 bg-white rounded-full" />
-          <span className="text-[11px] font-medium tracking-[0.2em] text-white uppercase font-mono">
-            For Freelancers & Solopreneurs
-          </span>
-        </div>
-
+      <div className="relative z-10 text-center px-4 sm:px-6 py-20 max-w-3xl mx-auto">
         {/* Headline */}
-        <h1 className="text-3xl md:text-5xl lg:text-6xl font-light leading-relaxed text-white mb-7 tracking-wide drop-shadow-lg text-balance">
+        <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-[2.75rem] font-medium leading-relaxed md:leading-[1.6] text-foreground mb-8 tracking-wide text-balance">
           売れない原因を言語化し、
           <br />
           心と仕組み、
@@ -36,56 +28,19 @@ export function HeroSection() {
         </h1>
 
         {/* Subheadline */}
-        <p className="text-sm md:text-base text-white/90 leading-loose mb-4 drop-shadow">
+        <p className="text-sm md:text-base text-foreground/80 leading-relaxed mb-10 max-w-xl mx-auto">
           AIの効率と、人のぬくもりを掛け合わせた「愛のあるWeb制作」を提供しています。
-        </p>
-
-        <p className="text-[13px] text-white/75 leading-relaxed mb-11">
-          集客できないのは、あなたのせいじゃない。
-          <br />
-          LP・LINE・GASの仕組みを整える前に、
-          <br className="md:hidden" />
-          「売れない理由」を一緒に言語化しましょう。
+          <br className="hidden sm:block" />
+          LP・LINE・GASの仕組みを整える前に、「売れない理由」を一緒に言語化しましょう。
         </p>
 
         {/* CTA */}
-        <div className="flex items-center justify-center flex-wrap gap-4">
-          <Link
-            href="#contact"
-            className="inline-flex items-center gap-2.5 bg-rose text-white text-base font-bold px-12 py-4 rounded-full transition-all shadow-lg shadow-rose/40 hover:-translate-y-1 hover:shadow-xl hover:shadow-rose/50 tracking-wide"
-          >
-            ▶ LINEで無料相談してみる
-          </Link>
-        </div>
-
-        <p className="text-xs text-white/65 mt-4">※</p>
-
-        {/* Illustration */}
-        <div className="mt-7 mx-auto w-[min(240px,55vw)] drop-shadow-2xl">
-          <Image
-            src="/images/illust-woman.png"
-            alt="女性のイラスト"
-            width={240}
-            height={300}
-            className="w-full h-auto opacity-[0.98]"
-          />
-        </div>
-      </div>
-
-      {/* Wave Divider */}
-      <div className="absolute bottom-0 left-0 right-0 z-20 leading-[0]">
-        <svg
-          viewBox="0 0 1440 60"
-          fill="none"
-          xmlns="http://www.w3.org/2000/svg"
-          preserveAspectRatio="none"
-          className="w-full block"
+        <Link
+          href="#contact"
+          className="inline-flex items-center justify-center bg-white text-foreground text-sm md:text-base font-medium px-8 py-3.5 rounded-full shadow-lg hover:shadow-xl transition-all hover:-translate-y-0.5"
         >
-          <path
-            d="M0,30 C360,60 1080,0 1440,30 L1440,60 L0,60 Z"
-            fill="#EFEBE0"
-          />
-        </svg>
+          まずは無料相談はこちら
+        </Link>
       </div>
     </section>
   );

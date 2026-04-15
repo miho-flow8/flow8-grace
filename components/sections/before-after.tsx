@@ -1,78 +1,89 @@
 const beforeItems = [
-  "なぜ売れないか分からない",
-  "SNSを頑張っても反応なし",
-  "プラットフォーム依存から抜け出せない",
-  "ITが怖くて仕組みが作れない",
-  "値上げできない・自信がない",
+  "発信を続けてもなかなか申し込みがない",
+  "何をしても自分に自信が持てない",
+  "自分のサービスの良さを上手に伝えられない",
+  "他の人と比べて落ち込むことが多い",
+  "どれだけ情報を集めてもなかなか実践できない",
+  "自分が本当にやりたいことがわからない",
 ];
 
 const afterItems = [
-  "売れない原因が言語化できて、行動できる",
-  "LINEから自然に問い合わせが入る",
-  "自分で集客できる仕組みがある",
-  "LP/LINE/GASの知識がついた",
-  "内側が変わって値上げできた",
+  "想いに共感した、理想のお客様から選ばれる",
+  "自分の価値を自分で認め、自信を持って発信できる",
+  "自分の言葉で、自然に価値を伝えられる",
+  "他人軸ではなく、自分軸で判断できる",
+  "必要な情報だけを選び、すぐに実践できる",
+  "ワクワクする方向に、一歩踏み出せる",
 ];
 
 export function BeforeAfterSection() {
   return (
-    <section id="benefit" className="py-24 bg-sage-light">
-      <div className="max-w-[1100px] mx-auto px-5 md:px-10">
-        {/* Header */}
-        <div className="text-center mb-14">
-          <h2 className="text-2xl md:text-4xl font-light text-rose mb-2">
-            こんな風に<span className="border-b-2 border-rose pb-0.5">変われる</span>。
+    <section
+      id="transform"
+      className="py-16 md:py-24 bg-gradient-to-br from-sage to-sage-deep relative overflow-hidden"
+    >
+      {/* Decorative Wave Pattern */}
+      <div className="absolute inset-0 opacity-10">
+        <svg
+          className="absolute bottom-0 left-0 w-full h-40"
+          viewBox="0 0 1440 160"
+          fill="none"
+          preserveAspectRatio="none"
+        >
+          <path
+            d="M0,80 C240,120 480,40 720,80 C960,120 1200,40 1440,80 L1440,160 L0,160 Z"
+            fill="white"
+          />
+        </svg>
+        <svg
+          className="absolute top-0 right-0 w-full h-40"
+          viewBox="0 0 1440 160"
+          fill="none"
+          preserveAspectRatio="none"
+        >
+          <path
+            d="M0,80 C240,40 480,120 720,80 C960,40 1200,120 1440,80 L1440,0 L0,0 Z"
+            fill="white"
+          />
+        </svg>
+      </div>
+
+      <div className="max-w-5xl mx-auto px-4 sm:px-6 relative z-10">
+        {/* Section Title */}
+        <div className="text-center mb-12">
+          <p className="text-white/80 text-sm mb-2">こんな悩み、ありませんか？</p>
+          <h2 className="text-xl md:text-2xl lg:text-3xl font-medium text-white">
+            心と仕組みを整えると、
+            <br className="sm:hidden" />
+            <span className="text-cream">こう変わる。</span>
           </h2>
-          <span className="text-[11px] tracking-[0.25em] text-muted-foreground uppercase font-mono">
-            Before / After
-          </span>
         </div>
 
-        {/* Before/After Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-[1fr_80px_1fr] gap-0">
-          {/* Before Column */}
-          <div className="bg-white rounded-2xl md:rounded-r-none p-10 shadow-md">
-            <span className="inline-block bg-gray-100 text-gray-500 text-[11px] font-bold tracking-[0.2em] uppercase px-5 py-1.5 rounded-full mb-7">
-              Before
-            </span>
-            <ul className="flex flex-col gap-3.5">
+        {/* Before/After Lists */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12">
+          {/* Before */}
+          <div>
+            <ul className="space-y-3">
               {beforeItems.map((item, index) => (
-                <li
-                  key={index}
-                  className="text-sm leading-relaxed flex items-start gap-2.5 text-gray-400 line-through py-2.5 border-b border-black/[0.04] last:border-b-0"
-                >
-                  <span className="text-gray-300 flex-shrink-0 text-base mt-0.5">
-                    ✕
+                <li key={index} className="flex items-start gap-3">
+                  <span className="flex-shrink-0 w-2 h-2 rounded-full bg-coral mt-2" />
+                  <span className="text-white/90 text-sm md:text-[15px] leading-relaxed">
+                    {item}
                   </span>
-                  {item}
                 </li>
               ))}
             </ul>
           </div>
 
-          {/* Arrow Column */}
-          <div className="hidden md:flex items-center justify-center bg-beige-light text-3xl text-beige font-serif py-5 md:py-0">
-            →
-          </div>
-          <div className="flex md:hidden items-center justify-center bg-beige-light text-3xl text-beige font-serif py-5">
-            ↓
-          </div>
-
-          {/* After Column */}
-          <div className="bg-white rounded-2xl md:rounded-l-none p-10 shadow-md">
-            <span className="inline-block bg-sage text-white text-[11px] font-bold tracking-[0.2em] uppercase px-5 py-1.5 rounded-full mb-7">
-              After
-            </span>
-            <ul className="flex flex-col gap-3.5">
+          {/* After */}
+          <div>
+            <ul className="space-y-3">
               {afterItems.map((item, index) => (
-                <li
-                  key={index}
-                  className="text-sm leading-relaxed flex items-start gap-2.5 text-foreground font-medium py-2.5 border-b border-black/[0.04] last:border-b-0"
-                >
-                  <span className="text-sage flex-shrink-0 text-base mt-0.5 font-bold">
-                    ✓
+                <li key={index} className="flex items-start gap-3">
+                  <span className="flex-shrink-0 w-2 h-2 rounded-full bg-cream mt-2" />
+                  <span className="text-white text-sm md:text-[15px] leading-relaxed">
+                    {item}
                   </span>
-                  {item}
                 </li>
               ))}
             </ul>

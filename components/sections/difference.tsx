@@ -1,53 +1,54 @@
+import { Heart, Lightbulb, Users } from "lucide-react";
+
 const differences = [
   {
-    icon: "🧠",
-    title: "内側と外側、\n両方できる唯一の存在",
+    icon: Heart,
+    title: "内面と外側、両方を変える唯一の方法",
     description:
-      "メンタルブロック解除 × LP/Web/集客導線構築を同時にできるのはFLOW∞Graceだけ。根本から売れる状態を作ります。",
+      "他のコンサルやWeb制作は「外側」だけ。私は心のブロックも一緒に解除します。",
+    bgColor: "bg-sage-lighter",
   },
   {
-    icon: "💻",
-    title: "IT苦手でも\n全部お任せできる",
+    icon: Lightbulb,
+    title: "自分でも言語化できる力を身につける",
     description:
-      "LP設計からLINE設定、GAS自動化まで。「何から始めればいいか分からない」方でも全部まるごとお任せできます。",
+      "依存ではなく、自立。あなた自身が課題を言語化できるようになります。",
+    bgColor: "bg-cream",
   },
   {
-    icon: "🕊️",
-    title: "3ヶ月で卒業できる\n自走サポート",
+    icon: Users,
+    title: "6ヶ月の長期サポート",
     description:
-      "ずっとサポートに依存するのではなく、3ヶ月で自分で動かせる集客の仕組みを完成させます。",
+      "単発ではなく、継続的なサポートで確実に変化を定着させます。",
+    bgColor: "bg-coral-light",
   },
 ];
 
 export function DifferenceSection() {
   return (
-    <section id="difference" className="py-24 bg-white">
-      <div className="max-w-[1100px] mx-auto px-5 md:px-10">
-        {/* Header */}
-        <div className="text-center mb-14">
-          <h2 className="text-2xl md:text-4xl font-light text-rose mb-2">
-            他と、何が<span className="border-b-2 border-rose pb-0.5">違う</span>
-            のか。
+    <section id="change" className="py-16 md:py-24 bg-white">
+      <div className="max-w-5xl mx-auto px-4 sm:px-6">
+        {/* Section Title */}
+        <div className="text-center mb-12">
+          <h2 className="text-xl md:text-2xl lg:text-3xl font-medium text-foreground">
+            他と、何が<span className="text-coral">違う</span>のか。
           </h2>
-          <span className="text-[11px] tracking-[0.25em] text-muted-foreground uppercase font-mono">
-            Why Us
-          </span>
         </div>
 
         {/* Difference Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-7">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-5 md:gap-6">
           {differences.map((item, index) => (
             <div
               key={index}
-              className="text-center p-11 rounded-2xl bg-beige-light hover:-translate-y-1.5 hover:shadow-xl transition-all"
+              className={`${item.bgColor} rounded-xl p-6 md:p-8 text-center`}
             >
-              <div className="w-[72px] h-[72px] mx-auto mb-6 bg-white rounded-full flex items-center justify-center text-3xl shadow-md">
-                {item.icon}
+              <div className="inline-flex items-center justify-center w-14 h-14 bg-white rounded-full mb-5 shadow-sm">
+                <item.icon className="w-7 h-7 text-sage" />
               </div>
-              <h3 className="font-serif text-lg font-normal mb-3.5 leading-relaxed text-foreground whitespace-pre-line">
+              <h3 className="text-sm md:text-base font-medium text-foreground mb-3 leading-relaxed">
                 {item.title}
               </h3>
-              <p className="text-[13px] leading-relaxed text-muted-foreground">
+              <p className="text-sm text-foreground/70 leading-relaxed">
                 {item.description}
               </p>
             </div>
