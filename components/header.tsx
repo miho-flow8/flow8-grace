@@ -5,10 +5,10 @@ import { useState } from "react";
 import { Menu, X } from "lucide-react";
 
 const navLinks = [
-  { href: "#vision", label: "私のビジョン" },
-  { href: "#change", label: "自分らしく変わる" },
-  { href: "#transform", label: "こう変わる" },
-  { href: "#contact", label: "無料相談" },
+  { href: "#problem", label: "お悩み" },
+  { href: "#service", label: "サービスについて" },
+  { href: "#difference", label: "こだわり" },
+  { href: "#price", label: "料金プラン" },
 ];
 
 export function Header() {
@@ -18,9 +18,12 @@ export function Header() {
     <header className="fixed top-0 left-0 right-0 z-50 bg-white/95 backdrop-blur-sm shadow-sm">
       <div className="flex items-center justify-between px-4 sm:px-6 py-3 max-w-6xl mx-auto">
         {/* Logo */}
-        <Link href="/" className="flex items-center">
-          <span className="text-base sm:text-lg font-medium tracking-wide text-foreground">
-            Miho Okubo
+        <Link href="/" className="flex flex-col items-start">
+          <span className="text-lg sm:text-xl font-serif tracking-wide text-foreground">
+            FLOW<span className="text-coral">∞</span>Grace
+          </span>
+          <span className="text-[10px] text-foreground/60 tracking-wider">
+            flow8-grace
           </span>
         </Link>
 
@@ -40,9 +43,9 @@ export function Header() {
         {/* CTA Button */}
         <Link
           href="#contact"
-          className="hidden md:inline-flex items-center bg-sage text-white text-sm font-medium px-5 py-2 rounded-full hover:bg-sage-deep transition-colors"
+          className="hidden md:inline-flex items-center bg-coral text-white text-sm font-medium px-5 py-2 rounded-full hover:bg-coral-dark transition-colors"
         >
-          無料相談
+          無料相談はこちら
         </Link>
 
         {/* Mobile Menu Button */}
@@ -72,9 +75,9 @@ export function Header() {
             <Link
               href="#contact"
               onClick={() => setMobileMenuOpen(false)}
-              className="inline-flex items-center justify-center bg-sage text-white text-sm font-medium px-5 py-3 rounded-full mt-2"
+              className="inline-flex items-center justify-center bg-coral text-white text-sm font-medium px-5 py-3 rounded-full mt-2 hover:bg-coral-dark transition-colors"
             >
-              無料相談
+              無料相談はこちら
             </Link>
           </nav>
         </div>
