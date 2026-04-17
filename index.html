@@ -398,6 +398,16 @@
     =========================== */
     #solution {
       background: var(--color-base);
+      padding: 120px 24px;
+    }
+    @media (max-width: 767px) {
+      #solution { padding: 80px 20px; }
+    }
+    #solution .section-label {
+      color: var(--color-sub);
+    }
+    #solution .section-title {
+      font-size: clamp(32px, 4.5vw, 54px);
     }
     .solution-layout {
       display: grid;
@@ -409,21 +419,21 @@
       .solution-layout { grid-template-columns: 1fr; gap: 32px; }
     }
     .solution-box {
-      border-radius: var(--radius);
-      padding: 40px;
+      border-radius: var(--radius-sm);
+      padding: 48px 40px;
     }
     .solution-box.inner {
-      background: var(--color-light-green);
-      border-top: 3px solid var(--color-main);
+      background: rgba(143, 175, 138, 0.1);
+      border-top: 2px solid var(--color-main);
     }
     .solution-box.outer {
-      background: var(--color-light-rose);
-      border-top: 3px solid var(--color-accent);
+      background: rgba(201, 130, 122, 0.1);
+      border-top: 2px solid var(--color-accent);
     }
     .solution-box-label {
       font-family: var(--font-brand);
-      font-size: 13px;
-      letter-spacing: 0.2em;
+      font-size: 12px;
+      letter-spacing: 0.3em;
       text-transform: uppercase;
       margin-bottom: 8px;
       display: block;
@@ -433,7 +443,7 @@
     .solution-box.outer .solution-box-label { color: var(--color-accent); }
     .solution-box-title {
       font-family: var(--font-ja-serif);
-      font-size: 20px;
+      font-size: clamp(22px, 2.5vw, 26px);
       font-weight: 400;
       margin-bottom: 20px;
     }
@@ -441,63 +451,71 @@
       display: flex;
       align-items: flex-start;
       gap: 10px;
-      font-size: 14px;
-      margin-bottom: 12px;
-      line-height: 1.7;
+      font-size: 15px;
+      margin-bottom: 0;
+      line-height: 2.2;
     }
     .solution-list li::before {
       content: '—';
-      color: var(--color-sub);
       flex-shrink: 0;
       margin-top: 2px;
     }
+    .solution-box.inner .solution-list li::before { color: var(--color-main); }
+    .solution-box.outer .solution-list li::before { color: var(--color-accent); }
 
     /* ===========================
        05. DIFFERENCE
     =========================== */
     #difference {
       background: var(--color-main);
+      padding: 120px 24px;
+    }
+    @media (max-width: 767px) {
+      #difference { padding: 80px 20px; }
+    }
+    #difference .section-title {
+      font-size: clamp(32px, 4.5vw, 52px);
     }
     .diff-grid {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
-      gap: 28px;
+      gap: 32px;
     }
-    @media (max-width: 767px) {
+    @media (max-width: 1024px) {
       .diff-grid { grid-template-columns: 1fr; }
     }
     .diff-card {
-      background: rgba(255,255,255,0.15);
-      border: 1px solid rgba(255,255,255,0.3);
-      border-radius: var(--radius);
-      padding: 36px 28px;
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      border-radius: 12px;
+      padding: 56px 32px;
       text-align: center;
-      backdrop-filter: blur(4px);
-      transition: transform 0.3s, background 0.3s;
+      transition: transform 0.3s ease, background 0.3s ease;
     }
     .diff-card:hover {
       transform: translateY(-4px);
-      background: rgba(255,255,255,0.25);
+      background: rgba(255, 255, 255, 0.12);
     }
     .diff-num {
       font-family: var(--font-brand);
-      font-size: 48px;
+      font-size: clamp(28px, 3vw, 32px);
       font-weight: 300;
-      color: rgba(255,255,255,0.4);
+      color: rgba(255, 255, 255, 0.5);
       line-height: 1;
-      margin-bottom: 16px;
+      margin-bottom: 24px;
+      letter-spacing: 0.1em;
     }
     .diff-title {
       font-family: var(--font-ja-serif);
-      font-size: 20px;
-      font-weight: 400;
+      font-size: clamp(20px, 2vw, 24px);
+      font-weight: 500;
       color: var(--color-white);
-      margin-bottom: 12px;
+      margin-bottom: 20px;
     }
     .diff-desc {
-      font-size: 13px;
-      color: rgba(255,255,255,0.85);
-      line-height: 1.8;
+      font-size: 14px;
+      color: rgba(255, 255, 255, 0.85);
+      line-height: 1.9;
     }
 
     /* ===========================
@@ -1109,7 +1127,7 @@
         <div class="diff-card fade-up delay-2">
           <div class="diff-num">02</div>
           <h3 class="diff-title">内側×外側</h3>
-          <p class="diff-desc">思考の整理と仕組みの構築を同時に進めるのが、flow&#x221E;graceだけの強みです。</p>
+          <p class="diff-desc">思考の整理と仕組みの構築を同時に進めるのが、flow8-graceだけの強みです。</p>
         </div>
         <div class="diff-card fade-up delay-3">
           <div class="diff-num">03</div>
