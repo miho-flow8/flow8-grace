@@ -270,12 +270,14 @@
       object-fit: cover;
       object-position: center;
       display: block;
+      filter: blur(3px);
+      transform: scale(1.05);
     }
     .fv-bg::after {
       content: '';
       position: absolute;
       inset: 0;
-      background: rgba(0, 0, 0, 0.3);
+      background: rgba(0, 0, 0, 0.4);
     }
     .fv-content {
       position: relative;
@@ -757,22 +759,28 @@
     }
     .profile-photo-wrap {
       position: relative;
+      width: 300px;
+      max-width: 100%;
+      margin: 0 auto;
     }
     .profile-photo {
-      width: 100%;
-      aspect-ratio: 3/4;
+      width: 300px;
+      height: 300px;
+      max-width: 100%;
       object-fit: cover;
-      border-radius: var(--radius);
-      box-shadow: 0 8px 40px rgba(0,0,0,0.12);
+      object-position: center top;
+      border-radius: 50%;
+      box-shadow: 0 8px 40px rgba(0,0,0,0.15);
+      display: block;
     }
     .profile-photo-deco {
       position: absolute;
-      bottom: -16px;
-      right: -16px;
-      width: 80px;
-      height: 80px;
+      bottom: -12px;
+      right: -12px;
+      width: 72px;
+      height: 72px;
       border: 2px solid var(--color-sub);
-      border-radius: var(--radius);
+      border-radius: 50%;
       z-index: -1;
     }
     .profile-name-en {
@@ -1395,15 +1403,20 @@
 
     // Scroll animation — IntersectionObserver + fade-up
     var fadeEls = document.querySelectorAll('.fade-up');
-    var observer = new IntersectionObserver(function(entries) {
-      entries.forEach(function(entry) {
-        if (entry.isIntersecting) {
-          entry.target.classList.add('visible');
-          observer.unobserve(entry.target);
-        }
-      });
-    }, { threshold: 0.12 });
-    fadeEls.forEach(function(el) { observer.observe(el); });
+    if ('IntersectionObserver' in window) {
+      var observer = new IntersectionObserver(function(entries) {
+        entries.forEach(function(entry) {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('visible');
+            observer.unobserve(entry.target);
+          }
+        });
+      }, { threshold: 0.08 });
+      fadeEls.forEach(function(el) { observer.observe(el); });
+    } else {
+      // フォールバック: IntersectionObserver非対応環境では全て表示
+      fadeEls.forEach(function(el) { el.classList.add('visible'); });
+    }
 
     // FV elements appear on load
     document.querySelectorAll('#fv .fade-up').forEach(function(el, i) {
