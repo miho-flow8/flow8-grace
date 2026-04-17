@@ -1,0 +1,616 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>flow8-grace | Hero Preview</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400;1,500&family=Shippori+Mincho+B1:wght@400;500;600;800&family=Zen+Kaku+Gothic+New:wght@300;400;500&display=swap" rel="stylesheet">
+
+  <style>
+    /* ── Variables ── */
+    :root {
+      --off-white:  #EFEBE0;
+      --sage:       #8FAF8A;
+      --rose:       #C9827A;
+      --gold:       #C4A882;
+      --dark:       #2B2420;
+      --mid:        #6B5B52;
+      --sage-light: rgba(143,175,138,0.12);
+      --rose-light: rgba(201,130,122,0.10);
+      --gold-light: rgba(196,168,130,0.15);
+    }
+
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+    html, body { height: 100%; }
+
+    body {
+      background: var(--off-white);
+      color: var(--dark);
+      font-family: 'Zen Kaku Gothic New', sans-serif;
+      overflow-x: hidden;
+    }
+
+    /* ── Grain texture overlay ── */
+    body::after {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)' opacity='1'/%3E%3C/svg%3E");
+      opacity: 0.03;
+      pointer-events: none;
+      z-index: 999;
+    }
+
+    /* ════════════════════════════
+       HERO SECTION
+    ════════════════════════════ */
+    .hero {
+      min-height: 100svh;
+      display: grid;
+      grid-template-columns: 55% 45%;
+      position: relative;
+      overflow: hidden;
+    }
+
+    /* ── Left column ── */
+    .hero__content {
+      padding: 0 64px 80px 88px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      position: relative;
+      z-index: 2;
+    }
+
+    /* Vertical side label */
+    .side-label {
+      writing-mode: vertical-rl;
+      position: absolute;
+      left: 28px;
+      top: 50%;
+      transform: translateY(-50%) rotate(180deg);
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 0.68rem;
+      letter-spacing: 0.4em;
+      color: var(--gold);
+      opacity: 0.65;
+      white-space: nowrap;
+    }
+
+    /* Eyebrow */
+    .hero__eyebrow {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      margin-bottom: 36px;
+      opacity: 0;
+      transform: translateX(-16px);
+      animation: slideRight 0.7s ease forwards 0.15s;
+    }
+
+    .eyebrow__rule {
+      width: 36px;
+      height: 1px;
+      background: var(--gold);
+      flex-shrink: 0;
+    }
+
+    .eyebrow__text {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 0.78rem;
+      font-weight: 400;
+      letter-spacing: 0.38em;
+      color: var(--gold);
+      text-transform: uppercase;
+    }
+
+    /* Headline block */
+    .hero__headline {
+      margin-bottom: 32px;
+    }
+
+    .headline__ja {
+      font-family: 'Shippori Mincho B1', serif;
+      font-size: clamp(2.0rem, 3.4vw, 3.4rem);
+      font-weight: 600;
+      line-height: 1.42;
+      letter-spacing: 0.04em;
+      color: var(--dark);
+      opacity: 0;
+      transform: translateY(28px);
+      animation: fadeUp 0.9s ease forwards 0.35s;
+    }
+
+    .headline__ja em {
+      font-style: normal;
+      color: var(--rose);
+      position: relative;
+    }
+
+    /* Underline accent on 仕組み化 */
+    .headline__ja em::after {
+      content: '';
+      position: absolute;
+      left: 0;
+      bottom: -4px;
+      width: 100%;
+      height: 2px;
+      background: linear-gradient(to right, var(--rose), var(--gold));
+      transform: scaleX(0);
+      transform-origin: left;
+      animation: scaleIn 0.6s ease forwards 1.2s;
+    }
+
+    .headline__en-sub {
+      display: block;
+      font-family: 'Cormorant Garamond', serif;
+      font-style: italic;
+      font-size: clamp(1.05rem, 1.6vw, 1.45rem);
+      font-weight: 300;
+      letter-spacing: 0.06em;
+      color: var(--mid);
+      margin-top: 12px;
+      opacity: 0;
+      transform: translateY(16px);
+      animation: fadeUp 0.8s ease forwards 0.6s;
+    }
+
+    .headline__detail {
+      display: block;
+      font-family: 'Zen Kaku Gothic New', sans-serif;
+      font-size: clamp(0.82rem, 1.05vw, 0.94rem);
+      font-weight: 300;
+      color: var(--mid);
+      line-height: 2.0;
+      letter-spacing: 0.07em;
+      margin-top: 20px;
+      opacity: 0;
+      transform: translateY(16px);
+      animation: fadeUp 0.8s ease forwards 0.8s;
+    }
+
+    /* Tags */
+    .hero__tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-bottom: 40px;
+      opacity: 0;
+      animation: fadeIn 0.8s ease forwards 1.0s;
+    }
+
+    .tag {
+      padding: 5px 14px;
+      border-radius: 100px;
+      font-size: 0.72rem;
+      font-weight: 400;
+      letter-spacing: 0.1em;
+      border: 1px solid;
+      transition: background 0.25s ease, color 0.25s ease;
+    }
+
+    .tag--s { border-color: var(--sage);  color: var(--sage); }
+    .tag--r { border-color: var(--rose);  color: var(--rose); }
+    .tag--g { border-color: var(--gold);  color: var(--gold); }
+
+    .tag:hover {
+      background: currentColor;
+      color: var(--off-white);
+    }
+
+    /* CTA group */
+    .hero__cta {
+      display: flex;
+      align-items: center;
+      gap: 28px;
+      flex-wrap: wrap;
+      opacity: 0;
+      transform: translateY(16px);
+      animation: fadeUp 0.8s ease forwards 1.15s;
+    }
+
+    .btn-primary {
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+      padding: 15px 36px;
+      background: var(--rose);
+      color: #fff;
+      text-decoration: none;
+      font-family: 'Shippori Mincho B1', serif;
+      font-size: 0.95rem;
+      font-weight: 500;
+      letter-spacing: 0.12em;
+      position: relative;
+      overflow: hidden;
+      transition: color 0.4s ease;
+      cursor: pointer;
+      border: none;
+    }
+
+    .btn-primary::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: var(--dark);
+      transform: scaleX(0);
+      transform-origin: left;
+      transition: transform 0.4s cubic-bezier(0.76, 0, 0.24, 1);
+    }
+
+    .btn-primary:hover::before { transform: scaleX(1); }
+
+    .btn-primary__text,
+    .btn-primary__icon {
+      position: relative;
+      z-index: 1;
+    }
+
+    .btn-primary__icon {
+      transition: transform 0.3s ease;
+    }
+
+    .btn-primary:hover .btn-primary__icon {
+      transform: translateX(5px);
+    }
+
+    .cta__note {
+      font-size: 0.74rem;
+      font-weight: 300;
+      color: var(--mid);
+      letter-spacing: 0.06em;
+      line-height: 1.7;
+    }
+
+    /* ── Right column ── */
+    .hero__visual {
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+    }
+
+    /* Gradient washes */
+    .hero__visual::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(ellipse 70% 60% at 55% 42%, rgba(143,175,138,0.18) 0%, transparent 70%),
+        radial-gradient(ellipse 50% 40% at 30% 75%, rgba(196,168,130,0.14) 0%, transparent 60%),
+        radial-gradient(ellipse 40% 35% at 80% 20%, rgba(201,130,122,0.08) 0%, transparent 60%);
+    }
+
+    /* Large orbit rings */
+    .orbit {
+      position: absolute;
+      border-radius: 50%;
+      border: 1px solid rgba(143,175,138,0.22);
+      top: 50%;
+      left: 50%;
+      animation: slowSpin 60s linear infinite;
+    }
+
+    .orbit--1 {
+      width: 78%;
+      aspect-ratio: 1;
+      transform: translate(-50%, -50%);
+    }
+
+    .orbit--2 {
+      width: 55%;
+      aspect-ratio: 1;
+      transform: translate(-50%, -50%) rotate(30deg);
+      border-color: rgba(196,168,130,0.18);
+      animation-direction: reverse;
+      animation-duration: 45s;
+    }
+
+    /* Botanical SVG */
+    .botanical {
+      position: relative;
+      z-index: 3;
+      width: 72%;
+      max-width: 380px;
+      opacity: 0;
+      animation: fadeIn 1.4s ease forwards 0.5s;
+      filter: drop-shadow(0 20px 40px rgba(143,175,138,0.15));
+    }
+
+    /* Floating word marks */
+    .ghost-word {
+      position: absolute;
+      font-family: 'Cormorant Garamond', serif;
+      font-style: italic;
+      font-weight: 300;
+      color: var(--sage);
+      opacity: 0.13;
+      pointer-events: none;
+      user-select: none;
+      z-index: 1;
+      white-space: nowrap;
+    }
+
+    .ghost-word--grace {
+      font-size: 7.5rem;
+      top: 6%;
+      right: -4%;
+      animation: drift 10s ease-in-out infinite;
+    }
+
+    .ghost-word--flow {
+      font-size: 4.5rem;
+      bottom: 12%;
+      left: 2%;
+      animation: drift 14s ease-in-out infinite reverse;
+    }
+
+    /* ── Bottom gradient bar ── */
+    .hero__bar {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 3px;
+      background: linear-gradient(90deg, var(--sage) 0%, var(--gold) 50%, var(--rose) 100%);
+      opacity: 0;
+      animation: fadeIn 0.5s ease forwards 1.9s;
+    }
+
+    /* ── Scroll cue ── */
+    .scroll-cue {
+      position: absolute;
+      bottom: 30px;
+      left: 88px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      opacity: 0;
+      animation: fadeIn 0.6s ease forwards 2.1s;
+    }
+
+    .scroll-cue__track {
+      width: 42px;
+      height: 1px;
+      background: rgba(107,91,82,0.3);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .scroll-cue__track::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: var(--rose);
+      transform: translateX(-100%);
+      animation: scanRight 2.2s ease-in-out infinite 2.5s;
+    }
+
+    .scroll-cue__label {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 0.65rem;
+      letter-spacing: 0.35em;
+      color: var(--mid);
+      text-transform: uppercase;
+    }
+
+    /* ════════════════════
+       KEYFRAMES
+    ════════════════════ */
+    @keyframes fadeUp {
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes slideRight {
+      to { opacity: 1; transform: translateX(0); }
+    }
+
+    @keyframes fadeIn {
+      to { opacity: 1; }
+    }
+
+    @keyframes scaleIn {
+      to { transform: scaleX(1); }
+    }
+
+    @keyframes slowSpin {
+      to { transform: translate(-50%, -50%) rotate(360deg); }
+    }
+
+    @keyframes drift {
+      0%, 100% { transform: translateY(0px); }
+      50%       { transform: translateY(-18px); }
+    }
+
+    @keyframes scanRight {
+      0%   { transform: translateX(-100%); }
+      50%  { transform: translateX(0); }
+      100% { transform: translateX(100%); }
+    }
+
+    /* ════════════════════
+       RESPONSIVE
+    ════════════════════ */
+    @media (max-width: 860px) {
+      .hero {
+        grid-template-columns: 1fr;
+        grid-template-rows: 44vw auto;
+      }
+
+      .hero__visual { order: 1; }
+      .hero__content {
+        order: 2;
+        padding: 48px 32px 100px;
+      }
+
+      .side-label { display: none; }
+      .scroll-cue { left: 32px; }
+
+      .botanical {
+        width: 55%;
+        max-width: 240px;
+      }
+
+      .ghost-word--grace { font-size: 5rem; }
+      .ghost-word--flow  { font-size: 3rem; }
+    }
+  </style>
+</head>
+<body>
+
+<section class="hero">
+
+  <!-- Side brand label -->
+  <span class="side-label" aria-hidden="true">flow8-grace &ensp;·&ensp; LP · LINE · GAS</span>
+
+  <!-- ── Left: Content ── -->
+  <div class="hero__content">
+
+    <div class="hero__eyebrow" aria-hidden="true">
+      <span class="eyebrow__rule"></span>
+      <span class="eyebrow__text">Systematize Your Growth</span>
+    </div>
+
+    <div class="hero__headline">
+      <h1 class="headline__ja">
+        個人事業主の集客を<br><em>仕組み化</em>する
+      </h1>
+      <span class="headline__en-sub">— The infrastructure for your business to thrive —</span>
+      <span class="headline__detail">
+        LP &thinsp;·&thinsp; LINE &thinsp;·&thinsp; GAS を一気通貫で設計。<br>
+        あなたのビジネスが自走できる<br>
+        売れる導線を、まるごとお任せ制作します。
+      </span>
+    </div>
+
+    <div class="hero__tags" aria-label="対応サービス">
+      <span class="tag tag--s">LP制作</span>
+      <span class="tag tag--g">LINE構築</span>
+      <span class="tag tag--r">GAS自動化</span>
+      <span class="tag tag--s">導線設計</span>
+      <span class="tag tag--g">集客仕組み化</span>
+    </div>
+
+    <div class="hero__cta">
+      <a href="#contact" class="btn-primary">
+        <span class="btn-primary__text">無料相談はこちら</span>
+        <svg class="btn-primary__icon" width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+          <path d="M2.5 8h11M9.5 4l4 4-4 4" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </a>
+      <p class="cta__note">
+        完全無料・30分オンライン<br>
+        お気軽にどうぞ
+      </p>
+    </div>
+
+  </div>
+
+  <!-- ── Right: Visual ── -->
+  <div class="hero__visual" aria-hidden="true">
+
+    <div class="ghost-word ghost-word--grace">grace</div>
+    <div class="ghost-word ghost-word--flow">flow</div>
+
+    <div class="orbit orbit--1"></div>
+    <div class="orbit orbit--2"></div>
+
+    <!-- Botanical line illustration -->
+    <svg class="botanical" viewBox="0 0 420 520" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <!-- Central stem -->
+      <path d="M210 490 C210 430 208 370 212 305 C215 270 210 215 207 160 C205 120 206 88 208 60"
+            stroke="#8FAF8A" stroke-width="1.8" stroke-linecap="round"/>
+
+      <!-- ── Branch: far left, low ── -->
+      <path d="M211 340 C192 325 168 314 142 305 C122 298 104 292 88 284"
+            stroke="#8FAF8A" stroke-width="1.2" stroke-linecap="round"/>
+      <!-- leaf L-low-1 -->
+      <path d="M211 340 C195 312 172 298 155 308 C168 325 192 338 211 340Z"
+            fill="rgba(143,175,138,0.22)" stroke="#8FAF8A" stroke-width="0.9"/>
+      <!-- leaf L-low-2 -->
+      <path d="M148 308 C130 290 110 283 96 288 C108 302 130 310 148 308Z"
+            fill="rgba(143,175,138,0.16)" stroke="#8FAF8A" stroke-width="0.8"/>
+
+      <!-- ── Branch: right, mid-low ── -->
+      <path d="M212 295 C234 275 258 265 284 255 C300 248 314 244 326 238"
+            stroke="#C4A882" stroke-width="1.2" stroke-linecap="round"/>
+      <!-- leaf R-mid-1 -->
+      <path d="M212 295 C232 270 258 260 272 270 C258 284 232 294 212 295Z"
+            fill="rgba(196,168,130,0.22)" stroke="#C4A882" stroke-width="0.9"/>
+      <!-- leaf R-mid-2 small -->
+      <path d="M280 254 C296 238 316 232 328 238 C318 252 298 256 280 254Z"
+            fill="rgba(196,168,130,0.16)" stroke="#C4A882" stroke-width="0.7"/>
+
+      <!-- ── Branch: left, mid ── -->
+      <path d="M210 242 C188 224 162 215 138 205 C118 196 100 190 84 180"
+            stroke="#8FAF8A" stroke-width="1.1" stroke-linecap="round"/>
+      <!-- leaf L-mid-1 -->
+      <path d="M210 242 C190 218 165 208 150 218 C163 233 188 242 210 242Z"
+            fill="rgba(143,175,138,0.20)" stroke="#8FAF8A" stroke-width="0.9"/>
+      <!-- leaf L-mid-2 -->
+      <path d="M142 207 C124 188 105 181 92 186 C103 200 124 208 142 207Z"
+            fill="rgba(143,175,138,0.14)" stroke="#8FAF8A" stroke-width="0.7"/>
+
+      <!-- ── Branch: right, upper ── -->
+      <path d="M209 195 C230 175 256 166 282 158 C298 152 312 148 324 142"
+            stroke="#C4A882" stroke-width="1.1" stroke-linecap="round"/>
+      <!-- leaf R-up-1 -->
+      <path d="M209 195 C228 171 255 163 268 172 C255 186 228 194 209 195Z"
+            fill="rgba(196,168,130,0.20)" stroke="#C4A882" stroke-width="0.9"/>
+
+      <!-- ── Branch: left, high ── -->
+      <path d="M208 148 C190 132 168 124 148 116"
+            stroke="#8FAF8A" stroke-width="1.0" stroke-linecap="round"/>
+      <!-- leaf L-high -->
+      <path d="M208 148 C192 126 172 118 158 126 C168 140 192 148 208 148Z"
+            fill="rgba(143,175,138,0.18)" stroke="#8FAF8A" stroke-width="0.8"/>
+
+      <!-- ── Bloom at top ── -->
+      <!-- Petals (8) -->
+      <g transform="translate(208,58)">
+        <ellipse rx="5.5" ry="12" fill="rgba(201,130,122,0.20)" stroke="#C9827A" stroke-width="0.7" transform="rotate(0)"/>
+        <ellipse rx="5.5" ry="12" fill="rgba(201,130,122,0.20)" stroke="#C9827A" stroke-width="0.7" transform="rotate(45)"/>
+        <ellipse rx="5.5" ry="12" fill="rgba(201,130,122,0.20)" stroke="#C9827A" stroke-width="0.7" transform="rotate(90)"/>
+        <ellipse rx="5.5" ry="12" fill="rgba(201,130,122,0.20)" stroke="#C9827A" stroke-width="0.7" transform="rotate(135)"/>
+        <ellipse rx="5.5" ry="12" fill="rgba(201,130,122,0.20)" stroke="#C9827A" stroke-width="0.7" transform="rotate(180)"/>
+        <ellipse rx="5.5" ry="12" fill="rgba(201,130,122,0.20)" stroke="#C9827A" stroke-width="0.7" transform="rotate(225)"/>
+        <ellipse rx="5.5" ry="12" fill="rgba(201,130,122,0.20)" stroke="#C9827A" stroke-width="0.7" transform="rotate(270)"/>
+        <ellipse rx="5.5" ry="12" fill="rgba(201,130,122,0.20)" stroke="#C9827A" stroke-width="0.7" transform="rotate(315)"/>
+        <!-- Center circles -->
+        <circle r="14" fill="rgba(201,130,122,0.12)" stroke="#C9827A" stroke-width="0.8"/>
+        <circle r="7"  fill="rgba(201,130,122,0.28)" stroke="#C9827A" stroke-width="0.8"/>
+        <circle r="3"  fill="rgba(201,130,122,0.75)"/>
+      </g>
+
+      <!-- ── Scattered dots ── -->
+      <circle cx="334" cy="140" r="2.8" fill="rgba(196,168,130,0.5)"/>
+      <circle cx="348" cy="126" r="1.6" fill="rgba(143,175,138,0.5)"/>
+      <circle cx="88"  cy="180" r="2.2" fill="rgba(201,130,122,0.4)"/>
+      <circle cx="74"  cy="168" r="1.4" fill="rgba(196,168,130,0.5)"/>
+      <circle cx="80"  cy="285" r="2.0" fill="rgba(143,175,138,0.45)"/>
+      <circle cx="68"  cy="298" r="1.4" fill="rgba(201,130,122,0.35)"/>
+
+      <!-- ── Subtle ground arc ── -->
+      <path d="M150 498 Q210 486 270 498"
+            stroke="rgba(143,175,138,0.28)" stroke-width="1" stroke-linecap="round"/>
+    </svg>
+
+  </div>
+
+  <!-- Bottom gradient bar -->
+  <div class="hero__bar" aria-hidden="true"></div>
+
+  <!-- Scroll cue -->
+  <div class="scroll-cue" aria-hidden="true">
+    <span class="scroll-cue__track"></span>
+    <span class="scroll-cue__label">Scroll</span>
+  </div>
+
+</section>
+
+</body>
+</html>
