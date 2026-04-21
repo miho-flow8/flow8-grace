@@ -142,6 +142,20 @@
       color: var(--color-white);
       transform: translateY(-2px);
     }
+    /* CHANGED: ヒーローCTA専用スタイル（通常の1.3倍サイズ・micro-interaction 200ms） */
+    .btn.btn-hero {
+      padding: 20px 48px;
+      font-size: 19px;
+      letter-spacing: 0.08em;
+      transition: all 0.2s ease;
+    }
+    .btn.btn-accent.btn-hero:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 14px 40px rgba(201, 130, 122, 0.55);
+    }
+    @media (max-width: 767px) {
+      .btn.btn-hero { padding: 18px 40px; font-size: 17px; }
+    }
 
     /* ===========================
        Scroll Animation
@@ -277,7 +291,13 @@
       content: '';
       position: absolute;
       inset: 0;
-      background: rgba(0, 0, 0, 0.4);
+      /* CHANGED: 左上→右下グラデーション（テキストエリアのみ暗く・写真は右下に見せる） */
+      background: linear-gradient(
+        135deg,
+        rgba(0, 0, 0, 0.35) 0%,
+        rgba(0, 0, 0, 0.15) 55%,
+        transparent 100%
+      );
     }
     .fv-content {
       position: relative;
@@ -303,7 +323,8 @@
     }
     .fv-main {
       font-family: var(--font-ja-serif);
-      font-size: clamp(28px, 5vw, 60px);
+      /* CHANGED: clamp min値を28px→22pxに下げSPで長いヘッドラインが1行に収まるよう対応 */
+      font-size: clamp(22px, 5vw, 60px);
       font-weight: 400;
       line-height: 1.55;
       letter-spacing: 0.03em;
@@ -315,11 +336,13 @@
       color: #f5d9a8;
     }
     .fv-sub {
-      font-size: clamp(14px, 1.8vw, 17px);
+      /* CHANGED: font-size +2px・text-shadow追加で視認性向上 */
+      font-size: clamp(16px, 1.8vw, 19px);
       line-height: 2;
       margin-bottom: 40px;
       max-width: 560px;
       opacity: 0.92;
+      text-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
     }
     .fv-cta-wrap {
       display: flex;
@@ -356,6 +379,33 @@
     @keyframes scrollLine {
       0%, 100% { transform: scaleY(1); opacity: 0.5; }
       50% { transform: scaleY(0.5); opacity: 1; }
+    }
+    /* CHANGED: 信頼要素リスト（CTA下）を新規追加 */
+    .fv-trust {
+      list-style: none;
+      margin-top: 28px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    .fv-trust li {
+      font-size: 13px;
+      color: rgba(255, 255, 255, 0.88);
+      letter-spacing: 0.04em;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .fv-trust li::before {
+      content: '✓';
+      color: #C4E8C0;
+      font-weight: 600;
+      flex-shrink: 0;
+      font-size: 12px;
+    }
+    @media (max-width: 767px) {
+      .fv-trust { margin-top: 20px; gap: 8px; }
+      .fv-trust li { font-size: 12px; }
     }
 
     /* ===========================
@@ -453,11 +503,12 @@
     }
     .empathy-solution-label {
       font-family: var(--font-brand);
-      font-size: 13px;
+      font-size: 18px;
       letter-spacing: 0.2em;
       color: var(--color-main);
-      margin-bottom: 20px;
+      margin-bottom: 24px;
       display: block;
+      font-weight: 500;
     }
     .empathy-solution-list {
       list-style: none;
@@ -1011,6 +1062,138 @@
       letter-spacing: 0.08em;
       color: rgba(255,255,255,0.35);
     }
+
+/* 単品メニューアイコン */
+.single-item {
+  position: relative;
+}
+.single-item-icon {
+  width: 28px;
+  height: 28px;
+  object-fit: contain;
+  margin-right: 12px;
+  flex-shrink: 0;
+  vertical-align: middle;
+}
+.single-item-left {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex: 1;
+}
+
+/* ===========================
+   FV Ken Burns アニメーション
+=========================== */
+@keyframes kenBurns {
+  0% {
+    transform: scale(1.05) translate(0, 0);
+  }
+  50% {
+    transform: scale(1.15) translate(-2%, -1%);
+  }
+  100% {
+    transform: scale(1.05) translate(0, 0);
+  }
+}
+
+.fv-bg img {
+  animation: kenBurns 20s ease-in-out infinite;
+  will-change: transform;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .fv-bg img {
+    animation: none;
+  }
+}
+
+/* ===========================
+   プランカード光沢アニメーション
+=========================== */
+.pack-card {
+  position: relative;
+  overflow: hidden;
+}
+
+.pack-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 60%;
+  height: 100%;
+  background: linear-gradient(
+    120deg,
+    transparent 0%,
+    rgba(255, 255, 255, 0.4) 50%,
+    transparent 100%
+  );
+  transition: left 0.8s ease;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.pack-card:hover::before {
+  left: 150%;
+}
+
+.pack-card > * {
+  position: relative;
+  z-index: 2;
+}
+
+.pack-card.featured .pack-badge {
+  z-index: 3;
+}
+
+.pack-card {
+  transition: transform 0.4s ease, box-shadow 0.4s ease;
+}
+
+/* Empathy セクション背景装飾 */
+#empathy {
+  position: relative;
+  overflow: hidden;
+}
+#empathy::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: url('img/—Pngtree—beautiful flowers blossom_3591546.png');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  opacity: 0.18;
+  z-index: 0;
+  pointer-events: none;
+}
+#empathy .empathy-inner {
+  position: relative;
+  z-index: 1;
+}
+
+/* Pngtreeクレジット表記（規約遵守・極小） */
+.image-credit {
+  text-align: center;
+  font-size: 10px;
+  color: #BBBBBB;
+  letter-spacing: 0.05em;
+  padding: 8px 24px 0;
+  background: var(--color-text);
+  margin: 0;
+}
+.image-credit a {
+  color: #BBBBBB;
+  text-decoration: none;
+  border-bottom: 1px dotted #BBBBBB;
+}
+.image-credit a:hover {
+  color: var(--color-white);
+}
   </style>
 </head>
 
@@ -1041,26 +1224,43 @@
   </header>
 
   <!-- 02. FV -->
+  <!-- CHANGED: ヘッドライン・サブコピー・CTA・信頼要素を全面刷新 -->
   <section id="fv">
     <div class="fv-bg">
       <img src="public/images/sandy-ravaloniaina-rARwqh9IXEE-unsplash.jpg" alt="" aria-hidden="true" />
     </div>
     <div class="fv-content">
       <span class="fv-tag fade-up">Attraction System Design</span>
+      <!-- CHANGED: ヘッドラインをベネフィット型「から→へ」対比構造に変更 -->
+      <!-- OLD: もう迷わない。<br>あなたのビジネスに<br><em>&#x201C;売れる流れ&#x201D;</em>を。 -->
       <h1 class="fv-main fade-up delay-1">
-        もう迷わない。<br>
-        あなたのビジネスに<br>
-        <em>&#x201C;売れる流れ&#x201D;</em>を。
+        売れない原因は、<br>
+        行動と思考の<em>&quot;両輪&quot;</em>にある。
       </h1>
+      <!-- CHANGED: サブコピーをPASONA P（問題）→A（親近感）意識に変更 -->
+      <!-- OLD: 個人事業主・一人サロンオーナーのための<br>LP・LINE・GASを一気通貫で設計する<br>集客の仕組み化サービスです。 -->
       <p class="fv-sub fade-up delay-2">
-        個人事業主・一人サロンオーナーのための<br>
-        LP・LINE・GASを一気通貫で設計する<br>
-        集客の仕組み化サービスです。
+        独立して1〜2年。<br>
+        SNS頑張ってるのに売上が安定しない。<br>
+        行動してるのに、結果が追いついてこない——。<br><br>
+        それは、正しい行動 × ブレないあり方。<br>
+        この両輪が揃っていないサインかも。<br><br>
+        flow∞graceは、心と仕組み両方からアプローチして<br>
+        &quot;楽しく集客が循環するシステム&quot;を構築します。
       </p>
       <div class="fv-cta-wrap fade-up delay-3">
-        <a href="#cta-mid" class="btn btn-accent" style="width:fit-content;">&#x25B6; LINEで無料相談してみる</a>
-        <p class="fv-note">何から始めていいか分からない方もOK　／　無理な営業なし</p>
+        <!-- CHANGED: btn-heroクラス追加で1.3倍サイズ化・インラインstyle削除・マイクロコピー変更 -->
+        <!-- OLD: <a href="#cta-mid" class="btn btn-accent" style="width:fit-content;">&#x25B6; LINEで無料相談してみる</a> -->
+        <!-- OLD: 何から始めていいか分からない方もOK　／　無理な営業なし -->
+        <a href="#cta-mid" class="btn btn-accent btn-hero">LINEで無料相談してみる →</a>
+        <p class="fv-note">完全無料・30分オンライン／お気軽にどうぞ</p>
       </div>
+      <!-- CHANGED: 信頼要素リストをCTA下に新規追加 -->
+      <ul class="fv-trust fade-up delay-4">
+        <li>本質を見抜く感覚×マーケ設計の両立</li>
+        <li>心と仕組みの両輪からアプローチ</li>
+        <li>LP・LINE・GAS一気通貫で自走できる仕組みを構築</li>
+      </ul>
     </div>
     <div class="fv-scroll" aria-hidden="true">
       <span>Scroll</span>
@@ -1078,19 +1278,19 @@
       <div class="problem-grid">
         <div class="problem-card fade-up delay-1">
           <div class="problem-card-num">01</div>
-          <p class="problem-card-text">SNSで発信しているのに全然反応がない。何を投稿しても「いいね」だけで問い合わせが来ない</p>
+          <p class="problem-card-text">フォロワーは増えてるのに問い合わせが来ない。何を発信しても反応が薄い</p>
         </div>
         <div class="problem-card fade-up delay-2">
           <div class="problem-card-num">02</div>
-          <p class="problem-card-text">ITが苦手でどこから手をつければいいか不明。LPもLINEも作りたいけど、全部自分でやるには限界</p>
+          <p class="problem-card-text">やることは分かってるのに手が止まる。気づいたら今日も何もできなかった</p>
         </div>
         <div class="problem-card fade-up delay-3">
           <div class="problem-card-num">03</div>
-          <p class="problem-card-text">値上げしたいのになぜかできない。「断られたら…」という不安が先に来てしまう</p>
+          <p class="problem-card-text">値上げしたいのにできない。「高いって言われたら…」の不安が先に来てしまう</p>
         </div>
         <div class="problem-card fade-up delay-4">
           <div class="problem-card-num">04</div>
-          <p class="problem-card-text">Hotpepper・紹介だけに依存している。プラットフォームをやめたら集客がゼロになる恐怖</p>
+          <p class="problem-card-text">来てくれた人にクロージングできない。自信がなくて金額を伝える手前で怯んでしまう</p>
         </div>
       </div>
     </div>
@@ -1099,21 +1299,21 @@
   <!-- 04. EMPATHY -->
   <section id="empathy">
     <div class="empathy-inner">
-      <h2 class="empathy-title fade-up">心と仕組み、両方から整える</h2>
-      <p class="empathy-lead fade-up delay-1">ビジネスがうまくいかない理由は、「やり方」だけでも「気持ち」だけでもありません。</p>
-      <p class="empathy-intro fade-up delay-2">たとえば…</p>
+      <h2 class="empathy-title fade-up">それ、&quot;やり方&quot;の問題<br>じゃありません。</h2>
+      <p class="empathy-lead fade-up delay-1">頑張ってるのに売れない。<br>それは、フリーランスなら誰もが一度は通る壁です。</p>
+      <p class="empathy-intro fade-up delay-2">でも実は——<br>あなたの中には、無意識のブレーキがあります。</p>
       <ul class="empathy-problem-list fade-up delay-2">
-        <li>いいサービスなのに発信が止まる</li>
-        <li>やるべきことは分かってるのに動けない</li>
-        <li>一度うまくいっても継続できない</li>
+        <li>「売れる自分」をまだイメージできていない</li>
+        <li>過去の失敗が、今の行動を止めている</li>
+        <li>お金を受け取ることに、無意識のブロックがある</li>
       </ul>
-      <p class="empathy-conclusion fade-up delay-3">それは、外側の仕組みと、内側の状態がズレているからです。</p>
-      <span class="empathy-solution-label fade-up delay-3">flow8-graceでは</span>
+      <p class="empathy-conclusion fade-up delay-3">これは意志の弱さじゃない。脳の仕組みです。<br>どれだけ仕組みを作っても、このブレーキが踏まれたままだと現実は変わりません。</p>
+      <span class="empathy-solution-label fade-up delay-3">flow∞graceでは</span>
       <ul class="empathy-solution-list fade-up delay-3">
-        <li><span class="check-mark">✔</span>売れる導線設計（LP・LINE・自動化）</li>
-        <li><span class="check-mark">✔</span>行動できる状態をつくるマインド設計</li>
+        <li><span class="check-mark">✔</span>外側：売れる導線（LP・LINE・GAS）</li>
+        <li><span class="check-mark">✔</span>内側：動ける自分をつくるマインド設計</li>
       </ul>
-      <p class="empathy-closing fade-up delay-4">この2つをセットで整えます。</p>
+      <p class="empathy-closing fade-up delay-4">この両輪をセットで整える、統合サポートです。</p>
     </div>
   </section>
 
@@ -1127,18 +1327,18 @@
       <div class="diff-grid">
         <div class="diff-card fade-up delay-1">
           <div class="diff-num">01</div>
-          <h3 class="diff-title">一気通貫設計</h3>
-          <p class="diff-desc">LP・LINE・GASのバラバラな仕組みを、ひとつの集客導線に統合します。</p>
+          <h3 class="diff-title">内側×外側の統合設計</h3>
+          <p class="diff-desc">マインドブロック解除と仕組み構築を、同じパートナーが担当。行動が止まらない&quot;自走する自分&quot;になれます。</p>
         </div>
         <div class="diff-card fade-up delay-2">
           <div class="diff-num">02</div>
-          <h3 class="diff-title">内側×外側</h3>
-          <p class="diff-desc">思考の整理と仕組みの構築を同時に進めるのが、flow8-graceだけの強みです。</p>
+          <h3 class="diff-title">自走できる状態まで届ける</h3>
+          <p class="diff-desc">マニュアル付き納品に加え、悩みを聞きブロックを外すサポート付き。渡しっぱなしにせず、あなたのペースで運用できる仕組みに。</p>
         </div>
         <div class="diff-card fade-up delay-3">
           <div class="diff-num">03</div>
-          <h3 class="diff-title">行動まで落とす</h3>
-          <p class="diff-desc">マニュアル付き納品・3ヶ月サポートで、自走できる再現性ある仕組みを届けます。</p>
+          <h3 class="diff-title">本質を見抜いて、言葉にする</h3>
+          <p class="diff-desc">セッション経験から培った&quot;人の奥にある想い&quot;を感じ取る力で、言葉にならないあなたの本質を、届く形にカタチにします。</p>
         </div>
       </div>
     </div>
@@ -1159,9 +1359,9 @@
           </div>
           <ul class="ba-list">
             <li>何を発信しても反応がなく問い合わせが来ない</li>
-            <li>紹介だけに依存しプラットフォームが怖くてやめられない</li>
+            <li>やるべきことは分かってるのに手が止まる</li>
             <li>値上げしたいのに罪悪感と不安で踏み出せない</li>
-            <li>ITが苦手で仕組みをどこから作ればいいかわからない</li>
+            <li>仕組みを作っても"動ける自分"になれない</li>
           </ul>
         </div>
         <div class="ba-col after fade-up delay-2">
@@ -1171,8 +1371,8 @@
           </div>
           <ul class="ba-list">
             <li>発信がLINE登録・相談につながる導線が完成する</li>
-            <li>自分のLPとLINEから安定して問い合わせが入る</li>
-            <li>思考ブロックが解除され自信を持って適正価格を出せる</li>
+            <li>内側のブレーキが外れ、自分から動ける状態になる</li>
+            <li>自信を持って適正価格を出せてクロージングが決まる</li>
             <li>マニュアル付きで納品され自分で運用できるようになる</li>
           </ul>
         </div>
@@ -1186,27 +1386,47 @@
       <div class="section-header fade-up">
         <span class="section-label">Service &amp; Price</span>
         <h2 class="section-title">サービスメニュー</h2>
-        <p class="section-subtitle">あなたの現状と目標に合わせた最適なプランをご提案します。</p>
+        <p class="section-subtitle">ホームページはセットプラン、LPやLINE設定は単品でもご依頼いただけます。<br>※プラン内容・価格は目安です。ご状況に合わせて柔軟にカスタマイズ可能。</p>
       </div>
+
+      <h3 class="single-title fade-up" style="text-align:center;border-bottom:none;">ホームページ制作セットプラン</h3>
 
       <div class="pack-grid">
         <div class="pack-card fade-up delay-1">
-          <h3 class="pack-name">ライトパック</h3>
+          <h3 class="pack-name">Light</h3>
           <div class="pack-price">¥198,000<span>（税込）</span></div>
-          <p class="pack-content">HP制作（5ページ）＋LINE設定<br><br>まずは基本の集客導線を整えたい方に。</p>
+          <p class="pack-content">
+            ✓ ホームページ制作（5ページ）<br>
+            ✓ LINE公式アカウント構築<br>
+            ✓ お問い合わせフォーム設置<br>
+            ✓ 初期設定サポート<br><br>
+            <span style="color:#6B6B6B;font-size:13px;">基本の集客導線を整えたい方に。</span>
+          </p>
           <a href="#cta-mid" class="btn btn-outline">無料相談へ</a>
         </div>
         <div class="pack-card featured fade-up delay-2">
-          <div class="pack-badge">&#x2B50; おすすめ</div>
-          <h3 class="pack-name">スタンダードパック</h3>
+          <div class="pack-badge">⭐ おすすめ</div>
+          <h3 class="pack-name">Standard</h3>
           <div class="pack-price">¥258,000<span>（税込）</span></div>
-          <p class="pack-content">HP制作（5ページ）＋LINE設定＋スプレッドシート×LINE連携<br><br>データ管理まで自動化したい方に。</p>
+          <p class="pack-content">
+            ✓ Lightの内容すべて<br>
+            ✓ スプレッドシート × LINE連携<br>
+            ✓ 顧客データ自動管理<br>
+            ✓ <strong>メンタルサポート付き</strong><br><br>
+            <span style="color:#6B6B6B;font-size:13px;">顧客管理＋内側の整えも同時に進めたい方に。</span>
+          </p>
           <a href="#cta-mid" class="btn btn-accent">無料相談へ</a>
         </div>
         <div class="pack-card fade-up delay-3">
-          <h3 class="pack-name">フルパック</h3>
+          <h3 class="pack-name">Full</h3>
           <div class="pack-price">¥298,000<span>（税込）</span></div>
-          <p class="pack-content">上記全て＋GAS自動化システム<br><br>完全に自走できる仕組みを一括構築。</p>
+          <p class="pack-content">
+            ✓ Standardの内容すべて<br>
+            ✓ GAS自動化システム構築<br>
+            ✓ 自動返信・自動予約対応<br>
+            ✓ <strong>メンタルサポート付き</strong><br><br>
+            <span style="color:#6B6B6B;font-size:13px;">完全自走型の仕組みで、時間とエネルギーを本業に。</span>
+          </p>
           <a href="#cta-mid" class="btn btn-outline">無料相談へ</a>
         </div>
       </div>
@@ -1215,25 +1435,54 @@
         <h3 class="single-title">単品メニュー</h3>
         <div class="single-grid">
           <div class="single-item">
-            <span class="single-item-name">LP制作</span>
-            <span class="single-item-price">¥98,000～</span>
+            <div class="single-item-left">
+              <img src="img/WEBページのアイコン 1.png" alt="" class="single-item-icon" aria-hidden="true" />
+              <span class="single-item-name">LP制作</span>
+            </div>
+            <span class="single-item-price">¥64,800〜</span>
           </div>
           <div class="single-item">
-            <span class="single-item-name">ホームページ制作</span>
-            <span class="single-item-price">¥198,000～</span>
-          </div>
-          <div class="single-item">
-            <span class="single-item-name">LINE公式アカウント設定</span>
+            <div class="single-item-left">
+              <img src="img/icon-bird.png" alt="" class="single-item-icon" aria-hidden="true" />
+              <span class="single-item-name">LINE公式アカウント設定</span>
+            </div>
             <span class="single-item-price">¥39,800</span>
           </div>
           <div class="single-item">
-            <span class="single-item-name">スプレッドシート×LINE連携</span>
+            <div class="single-item-left">
+              <img src="img/icon-pc.png" alt="" class="single-item-icon" aria-hidden="true" />
+              <span class="single-item-name">スプレッドシート×LINE連携</span>
+            </div>
             <span class="single-item-price">¥80,000</span>
           </div>
           <div class="single-item">
-            <span class="single-item-name">GAS自動化システム</span>
+            <div class="single-item-left">
+              <img src="img/icon-search.png" alt="" class="single-item-icon" aria-hidden="true" />
+              <span class="single-item-name">GAS自動化システム</span>
+            </div>
             <span class="single-item-price">¥50,000〜</span>
           </div>
+          <div class="single-item">
+            <div class="single-item-left">
+              <img src="img/icon-web.png" alt="" class="single-item-icon" aria-hidden="true" />
+              <span class="single-item-name">3ヶ月運用サポート</span>
+            </div>
+            <span class="single-item-price">¥29,800/月</span>
+          </div>
+          <div class="single-item">
+            <div class="single-item-left">
+              <img src="img/icon-money.png" alt="" class="single-item-icon" aria-hidden="true" />
+              <span class="single-item-name">スポット対応</span>
+            </div>
+            <span class="single-item-price">¥15,000</span>
+          </div>
+        </div>
+        <p style="text-align:center;margin-top:40px;font-size:13px;color:#6B6B6B;line-height:1.9;">
+          ※表示価格はあくまで目安です。内容の組み合わせや規模に応じて柔軟に変更可能。<br>プラン外のご相談も含め、LINE無料相談で最適なご提案をいたします。
+        </p>
+      </div>
+
+      
         </div>
       </div>
     </div>
@@ -1341,27 +1590,37 @@
             <div class="faq-icon">+</div>
           </div>
           <div class="faq-answer">
-            <div class="faq-answer-inner">はい、お見積りは無料で承っております。まずはご要望をお聞かせください。</div>
+            <div class="faq-answer-inner">はい、完全無料です。お気軽にLINEからご相談ください。</div>
           </div>
         </div>
         <div class="faq-item fade-up">
           <div class="faq-question">
             <span class="faq-q-label">Q</span>
-            <span class="faq-q-text">個人からの依頼も可能ですか？</span>
+            <span class="faq-q-text">独立したばかりでも相談できますか？</span>
             <div class="faq-icon">+</div>
           </div>
           <div class="faq-answer">
-            <div class="faq-answer-inner">もちろんです！個人事業主様、サロンオーナー様からのご依頼が最も多いです。お一人おひとりのペースに合わせて丁寧に対応いたします。</div>
+            <div class="faq-answer-inner">むしろ得意分野です。独立1〜2年目の方のご相談が最も多く、「最初の一歩」から一緒に設計します。</div>
           </div>
         </div>
         <div class="faq-item fade-up">
           <div class="faq-question">
             <span class="faq-q-label">Q</span>
-            <span class="faq-q-text">対応可能な地域はどこですか？</span>
+            <span class="faq-q-text">プランの内容や価格は変更できますか？</span>
             <div class="faq-icon">+</div>
           </div>
           <div class="faq-answer">
-            <div class="faq-answer-inner">オンライン（Zoom等）にて全国どこでも対応可能です。兵庫県近郊であれば対面でのご相談も承ります。</div>
+            <div class="faq-answer-inner">はい、表示しているプランはあくまで目安です。必要な要素だけを組み合わせたり、オプションの追加・削除も柔軟に対応します。まずはヒアリングでご状況をお聞かせください。</div>
+          </div>
+        </div>
+        <div class="faq-item fade-up">
+          <div class="faq-question">
+            <span class="faq-q-label">Q</span>
+            <span class="faq-q-text">プランに載っていないサポートもありますか？</span>
+            <div class="faq-icon">+</div>
+          </div>
+          <div class="faq-answer">
+            <div class="faq-answer-inner">はい。マインド面のサポート（在り方・ブロック解放）や、より深い3ヶ月の本気プログラムなど、外側の制作以外のメニューもご用意しています。LINE無料相談で詳しくご案内します。</div>
           </div>
         </div>
         <div class="faq-item fade-up">
@@ -1371,27 +1630,29 @@
             <div class="faq-icon">+</div>
           </div>
           <div class="faq-answer">
-            <div class="faq-answer-inner">大丈夫です！漠然としたお悩みから本質を汲み取るのが私の強みですので、安心してお話しください。</div>
+            <div class="faq-answer-inner">大丈夫です。「漠然とした想いを形にする」のが私の強みです。話しながら一緒に整理していきましょう。</div>
+          </div>
+        </div>
+        <div class="faq-item fade-up">
+          <div class="faq-question">
+            <span class="faq-q-label">Q</span>
+            <span class="faq-q-text">対応地域はどこですか？</span>
+            <div class="faq-icon">+</div>
+          </div>
+          <div class="faq-answer">
+            <div class="faq-answer-inner">オンライン（Zoom等）で全国対応しています。兵庫県近郊であれば対面でのご相談も承ります。</div>
           </div>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- 12. FINAL CTA -->
-  <section id="final-cta">
-    <div class="final-cta-inner">
-      <div class="fade-up">
-        <span class="section-label" style="display:block;text-align:center;margin-bottom:16px;">Take the First Step</span>
-        <h2 class="final-cta-heading">想いをカタチにする第一歩を、<br>一緒に踏み出しませんか？</h2>
-        <p class="final-cta-text">
-          現在のお悩み、将来の理想、なんでもお聞かせください。<br>
-          あなたのパートナーとして全力でサポートします。
-        </p>
-        <a href="#" class="btn btn-accent">無料相談・お問い合わせはこちら</a>
-      </div>
-    </div>
-  </section>
+ <!-- 12. FINAL CTA は削除しました（CTA Midと重複のため） -->
+  
+<!-- 画像クレジット表記 -->
+  <p class="image-credit">
+    花びら画像：<a href="https://pngtree.com" target="_blank" rel="noopener">Designed by Pngtree</a>
+  </p>
 
   <!-- 13. FOOTER -->
   <footer id="footer">
@@ -1401,7 +1662,7 @@
         <a href="#">Privacy Policy</a>
         <a href="#">Terms of Service</a>
       </nav>
-      <p class="footer-copy">&#x00A9; 2024 Miho Okubo. All Rights Reserved.</p>
+      <p class="footer-copy">&#x00A9; 2026 Miho Okubo. All Rights Reserved.</p>
     </div>
   </footer>
 
