@@ -291,13 +291,7 @@
       content: '';
       position: absolute;
       inset: 0;
-      /* CHANGED: 左上→右下グラデーション（テキストエリアのみ暗く・写真は右下に見せる） */
-      background: linear-gradient(
-        135deg,
-        rgba(0, 0, 0, 0.35) 0%,
-        rgba(0, 0, 0, 0.15) 55%,
-        transparent 100%
-      );
+      background: rgba(0, 0, 0, 0.35);
     }
     .fv-content {
       position: relative;
@@ -1194,6 +1188,150 @@
 .image-credit a:hover {
   color: var(--color-white);
 }
+
+    /* ===========================
+       DECORATIONS
+    =========================== */
+
+    /* 装飾1: 水彩風グラデーション背景 */
+    #problem {
+      position: relative;
+      overflow: hidden;
+      background:
+        radial-gradient(ellipse at 15% 25%, rgba(196, 168, 130, 0.09) 0%, transparent 55%),
+        radial-gradient(ellipse at 85% 75%, rgba(143, 175, 138, 0.07) 0%, transparent 50%),
+        var(--color-light-beige);
+    }
+    #empathy {
+      position: relative;
+      overflow: hidden;
+      background:
+        radial-gradient(ellipse at 80% 20%, rgba(201, 130, 122, 0.08) 0%, transparent 50%),
+        radial-gradient(ellipse at 20% 80%, rgba(143, 175, 138, 0.07) 0%, transparent 55%),
+        radial-gradient(ellipse at 55% 50%, rgba(196, 168, 130, 0.05) 0%, transparent 65%),
+        var(--color-base);
+    }
+    #before-after {
+      position: relative;
+      overflow: hidden;
+      background:
+        radial-gradient(ellipse at 75% 15%, rgba(143, 175, 138, 0.08) 0%, transparent 50%),
+        radial-gradient(ellipse at 25% 85%, rgba(201, 130, 122, 0.07) 0%, transparent 50%),
+        var(--color-light-beige);
+    }
+
+    /* 装飾2: blur装飾円 */
+    .deco-blur {
+      position: absolute;
+      border-radius: 50%;
+      filter: blur(70px);
+      opacity: 0.12;
+      pointer-events: none;
+      z-index: 0;
+    }
+    .deco-blur.rose  { background: #C9827A; }
+    .deco-blur.sage  { background: #8FAF8A; }
+    .deco-blur.beige { background: #C4A882; }
+
+    /* fv hero 下部 */
+    #fv { position: relative; }
+    .fv-deco-1 {
+      width: 320px; height: 320px;
+      bottom: -60px; right: -60px;
+      opacity: 0.10;
+    }
+    /* difference 四隅 */
+    #difference { position: relative; overflow: hidden; }
+    .diff-deco-tl {
+      width: 260px; height: 260px;
+      top: -80px; left: -80px;
+      opacity: 0.10;
+    }
+    .diff-deco-br {
+      width: 220px; height: 220px;
+      bottom: -60px; right: -60px;
+      opacity: 0.10;
+    }
+    /* profile */
+    #profile { position: relative; overflow: hidden; }
+    .profile-deco-tr {
+      width: 300px; height: 300px;
+      top: -60px; right: -80px;
+      opacity: 0.09;
+    }
+    /* cta-mid */
+    #cta-mid { position: relative; overflow: hidden; }
+    .cta-deco-bl {
+      width: 280px; height: 280px;
+      bottom: -60px; left: -60px;
+      opacity: 0.12;
+    }
+    /* z-index: コンテンツを前面に */
+    #difference .section-inner,
+    #profile .section-inner,
+    #cta-mid .container {
+      position: relative;
+      z-index: 1;
+    }
+    #fv .fv-content { z-index: 2; }
+
+    /* 装飾3: 波線SVGセパレーター */
+    .wave-divider {
+      display: block;
+      width: 100%;
+      height: 60px;
+      overflow: hidden;
+      pointer-events: none;
+      margin-bottom: -2px;
+    }
+
+    /* 装飾4: 花びら落下アニメーション */
+    @keyframes petal-fall {
+      0%   { transform: translateY(-10vh) translateX(0)     rotate(0deg);   opacity: 0; }
+      8%   { opacity: 0.55; }
+      88%  { opacity: 0.55; }
+      100% { transform: translateY(115vh) translateX(80px)  rotate(400deg); opacity: 0; }
+    }
+    @keyframes petal-fall-b {
+      0%   { transform: translateY(-10vh) translateX(0)      rotate(0deg);   opacity: 0; }
+      8%   { opacity: 0.4; }
+      88%  { opacity: 0.4; }
+      100% { transform: translateY(115vh) translateX(-60px)  rotate(-320deg); opacity: 0; }
+    }
+    .petal {
+      position: absolute;
+      width: 10px;
+      height: 10px;
+      border-radius: 50% 0 50% 0;
+      pointer-events: none;
+      z-index: 3;
+    }
+    .petal-1 {
+      background: rgba(201, 130, 122, 0.55);
+      top: 0; left: 18%;
+      animation: petal-fall 18s 0s   linear infinite;
+    }
+    .petal-2 {
+      background: rgba(239, 235, 224, 0.65);
+      width: 8px; height: 8px;
+      top: 0; left: 42%;
+      animation: petal-fall-b 22s 4s  linear infinite;
+    }
+    .petal-3 {
+      background: rgba(201, 130, 122, 0.45);
+      top: 0; left: 68%;
+      animation: petal-fall 26s 9s   linear infinite;
+    }
+    .petal-4 {
+      background: rgba(196, 168, 130, 0.5);
+      width: 7px; height: 7px;
+      top: 0; left: 80%;
+      animation: petal-fall-b 20s 14s linear infinite;
+    }
+    @media (max-width: 767px) {
+      .petal-3, .petal-4 { display: none; }
+      .deco-blur { opacity: 0.08; }
+    }
   </style>
 </head>
 
@@ -1229,6 +1367,13 @@
     <div class="fv-bg">
       <img src="public/images/sandy-ravaloniaina-rARwqh9IXEE-unsplash.jpg" alt="" aria-hidden="true" />
     </div>
+    <!-- 花びらアニメーション -->
+    <div class="petal petal-1" aria-hidden="true"></div>
+    <div class="petal petal-2" aria-hidden="true"></div>
+    <div class="petal petal-3" aria-hidden="true"></div>
+    <div class="petal petal-4" aria-hidden="true"></div>
+    <!-- blur装飾 -->
+    <div class="deco-blur rose fv-deco-1" aria-hidden="true"></div>
     <div class="fv-content">
       <span class="fv-tag fade-up">Attraction System Design</span>
       <!-- CHANGED: ヘッドラインをベネフィット型「から→へ」対比構造に変更 -->
@@ -1240,13 +1385,8 @@
       <!-- CHANGED: サブコピーをPASONA P（問題）→A（親近感）意識に変更 -->
       <!-- OLD: 個人事業主・一人サロンオーナーのための<br>LP・LINE・GASを一気通貫で設計する<br>集客の仕組み化サービスです。 -->
       <p class="fv-sub fade-up delay-2">
-        独立して1〜2年。<br>
-        SNS頑張ってるのに売上が安定しない。<br>
-        行動してるのに、結果が追いついてこない——。<br><br>
-        それは、正しい行動 × ブレないあり方。<br>
-        この両輪が揃っていないサインかも。<br><br>
-        flow∞graceは、心と仕組み両方からアプローチして<br>
-        &quot;楽しく集客が循環するシステム&quot;を構築します。
+        SNSも広告も試したのに、手応えがない。<br>
+        それは<em>&ldquo;やり方&rdquo;</em>じゃなく、<em>&ldquo;設計&rdquo;</em>の問題です。
       </p>
       <div class="fv-cta-wrap fade-up delay-3">
         <!-- CHANGED: btn-heroクラス追加で1.3倍サイズ化・インラインstyle削除・マイクロコピー変更 -->
@@ -1267,6 +1407,12 @@
       <div class="fv-scroll-line"></div>
     </div>
   </section>
+
+  <!-- wave divider -->
+  <svg class="wave-divider" viewBox="0 0 1440 80" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none" aria-hidden="true">
+    <path d="M0,40 C240,10 480,70 720,40 C960,10 1200,70 1440,40" stroke="#C9827A" stroke-width="1.5" fill="none" stroke-linecap="round" opacity="0.5"/>
+    <path d="M0,45 C240,20 480,65 720,45 C960,25 1200,60 1440,45" stroke="#8FAF8A" stroke-width="1" fill="none" stroke-linecap="round" opacity="0.3"/>
+  </svg>
 
   <!-- 03. PROBLEM -->
   <section id="problem" class="section">
@@ -1296,8 +1442,15 @@
     </div>
   </section>
 
+  <!-- wave divider -->
+  <svg class="wave-divider" viewBox="0 0 1440 80" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none" aria-hidden="true">
+    <path d="M0,38 C360,68 720,8 1080,38 C1260,53 1380,28 1440,38" stroke="#C9827A" stroke-width="1.5" fill="none" stroke-linecap="round" opacity="0.45"/>
+    <path d="M0,44 C360,74 720,14 1080,44 C1260,59 1380,34 1440,44" stroke="#8FAF8A" stroke-width="1" fill="none" stroke-linecap="round" opacity="0.28"/>
+  </svg>
+
   <!-- 04. EMPATHY -->
   <section id="empathy">
+    <div class="deco-blur sage" style="width:280px;height:280px;top:-80px;right:-80px;" aria-hidden="true"></div>
     <div class="empathy-inner">
       <h2 class="empathy-title fade-up">それ、&quot;やり方&quot;の問題<br>じゃありません。</h2>
       <p class="empathy-lead fade-up delay-1">頑張ってるのに売れない。<br>それは、フリーランスなら誰もが一度は通る壁です。</p>
@@ -1318,7 +1471,15 @@
   </section>
 
   <!-- 05. DIFFERENCE -->
+  <!-- wave divider -->
+  <svg class="wave-divider" viewBox="0 0 1440 80" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none" aria-hidden="true">
+    <path d="M0,40 C240,10 480,70 720,40 C960,10 1200,70 1440,40" stroke="#C9827A" stroke-width="1.5" fill="none" stroke-linecap="round" opacity="0.5"/>
+    <path d="M0,45 C240,20 480,65 720,45 C960,25 1200,60 1440,45" stroke="#8FAF8A" stroke-width="1" fill="none" stroke-linecap="round" opacity="0.3"/>
+  </svg>
+
   <section id="difference" class="section">
+    <div class="deco-blur beige diff-deco-tl" aria-hidden="true"></div>
+    <div class="deco-blur rose diff-deco-br" aria-hidden="true"></div>
     <div class="section-inner">
       <div class="section-header fade-up">
         <span class="section-label" style="color:rgba(255,255,255,0.7);">Difference</span>
@@ -1327,17 +1488,17 @@
       <div class="diff-grid">
         <div class="diff-card fade-up delay-1">
           <div class="diff-num">01</div>
-          <h3 class="diff-title">内側×外側の統合設計</h3>
+          <h3 class="diff-title">マインドと仕組み、両方やるから結果が続く</h3>
           <p class="diff-desc">マインドブロック解除と仕組み構築を、同じパートナーが担当。行動が止まらない&quot;自走する自分&quot;になれます。</p>
         </div>
         <div class="diff-card fade-up delay-2">
           <div class="diff-num">02</div>
-          <h3 class="diff-title">自走できる状態まで届ける</h3>
+          <h3 class="diff-title">納品して終わり、じゃない</h3>
           <p class="diff-desc">マニュアル付き納品に加え、悩みを聞きブロックを外すサポート付き。渡しっぱなしにせず、あなたのペースで運用できる仕組みに。</p>
         </div>
         <div class="diff-card fade-up delay-3">
           <div class="diff-num">03</div>
-          <h3 class="diff-title">本質を見抜いて、言葉にする</h3>
+          <h3 class="diff-title">"言語化できない魅力"を、売れる言葉に翻訳</h3>
           <p class="diff-desc">セッション経験から培った&quot;人の奥にある想い&quot;を感じ取る力で、言葉にならないあなたの本質を、届く形にカタチにします。</p>
         </div>
       </div>
@@ -1379,6 +1540,12 @@
       </div>
     </div>
   </section>
+
+  <!-- wave divider -->
+  <svg class="wave-divider" viewBox="0 0 1440 80" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none" aria-hidden="true">
+    <path d="M0,42 C180,72 540,12 900,42 C1080,57 1320,22 1440,42" stroke="#C9827A" stroke-width="1.5" fill="none" stroke-linecap="round" opacity="0.45"/>
+    <path d="M0,48 C180,78 540,18 900,48 C1080,63 1320,28 1440,48" stroke="#8FAF8A" stroke-width="1" fill="none" stroke-linecap="round" opacity="0.28"/>
+  </svg>
 
   <!-- 07. SERVICE -->
   <section id="service" class="section">
@@ -1536,8 +1703,15 @@
     </div>
   </section>
 
+  <!-- wave divider -->
+  <svg class="wave-divider" viewBox="0 0 1440 80" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none" aria-hidden="true">
+    <path d="M0,40 C240,10 480,70 720,40 C960,10 1200,70 1440,40" stroke="#C9827A" stroke-width="1.5" fill="none" stroke-linecap="round" opacity="0.5"/>
+    <path d="M0,45 C240,20 480,65 720,45 C960,25 1200,60 1440,45" stroke="#8FAF8A" stroke-width="1" fill="none" stroke-linecap="round" opacity="0.3"/>
+  </svg>
+
   <!-- 09. PROFILE -->
   <section id="profile" class="section">
+    <div class="deco-blur rose profile-deco-tr" aria-hidden="true"></div>
     <div class="section-inner">
       <div class="section-header fade-up">
         <span class="section-label">Profile</span>
@@ -1562,6 +1736,7 @@
 
   <!-- 10. CTA MID -->
   <section id="cta-mid">
+    <div class="deco-blur beige cta-deco-bl" aria-hidden="true"></div>
     <div class="container" style="text-align:center;">
       <span class="section-label fade-up" style="color:rgba(255,255,255,0.7);">Free Consultation</span>
       <h2 class="cta-mid-heading fade-up delay-1">
