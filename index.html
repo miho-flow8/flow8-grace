@@ -727,6 +727,53 @@
       flex: 1;
     }
     .pack-card .btn { width: 100%; text-align: center; justify-content: center; }
+    .pack-list {
+      list-style: none;
+      padding: 0;
+      margin: 0 0 20px;
+      font-size: 14px;
+      line-height: 1.85;
+      color: #5A5A5A;
+      flex: 1;
+    }
+    .pack-list > li { margin-bottom: 6px; }
+    .pack-sub {
+      font-size: 12px;
+      color: #8FAF8A;
+      margin-left: 1.3em;
+    }
+    .pack-catch {
+      font-size: 13px;
+      color: #6B6B6B;
+      margin: 0 0 24px;
+      line-height: 1.7;
+    }
+    .pdf-toggle {
+      display: inline-block;
+      margin-left: 6px;
+      background: none;
+      border: 1px solid var(--color-accent);
+      color: var(--color-accent);
+      font-size: 11px;
+      padding: 1px 8px;
+      border-radius: 50px;
+      cursor: pointer;
+      vertical-align: middle;
+      transition: background 0.2s, color 0.2s;
+      line-height: 1.6;
+    }
+    .pdf-toggle:hover { background: var(--color-accent); color: var(--color-white); }
+    .pdf-toggle[aria-expanded="true"] { background: var(--color-accent); color: var(--color-white); }
+    .pdf-list {
+      list-style: none;
+      padding: 8px 0 4px 1.3em;
+      margin: 6px 0 0;
+      font-size: 12px;
+      color: #7A7A7A;
+      line-height: 1.9;
+      border-left: 2px solid rgba(143,175,138,0.35);
+    }
+    .pdf-list[hidden] { display: none; }
 
     .single-title {
       font-family: var(--font-ja-serif);
@@ -769,60 +816,145 @@
        08. PROCESS
     =========================== */
     #process {
-      background: var(--color-light-beige);
+      background: var(--color-base);
     }
-    .process-list {
-      max-width: 720px;
-      margin: 0 auto;
-    }
-    .process-item {
-      display: flex;
-      gap: 28px;
-      margin-bottom: 40px;
+    .process-timeline {
       position: relative;
+      max-width: 640px;
+      margin: 0 auto;
+      padding-left: 1rem;
     }
-    .process-item:not(:last-child)::after {
-      content: '';
+    .process-wave {
       position: absolute;
-      left: 24px;
-      top: 52px;
-      bottom: -40px;
-      width: 1px;
-      background: linear-gradient(to bottom, var(--color-main), rgba(143,175,138,0.2));
+      left: 0;
+      top: 0;
+      width: 64px;
+      height: 100%;
+      pointer-events: none;
     }
-    .process-num {
-      width: 48px;
-      height: 48px;
+    .process-wave path {
+      stroke-dasharray: 1200;
+      stroke-dashoffset: 1200;
+      transition: stroke-dashoffset 2.5s cubic-bezier(0.65, 0, 0.35, 1);
+    }
+    .process-wave.is-animated path {
+      stroke-dashoffset: 0;
+    }
+    .process-step {
+      position: relative;
+      display: flex;
+      align-items: flex-start;
+      gap: 1.5rem;
+      margin-bottom: 3rem;
+      opacity: 0;
+      transform: translateY(20px);
+      transition: opacity 0.7s ease-out, transform 0.7s ease-out;
+      transition-delay: var(--step-delay, 0s);
+    }
+    .process-step:last-child { margin-bottom: 0; }
+    .process-step.is-visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    .process-step-icon-wrapper {
+      position: relative;
+      flex-shrink: 0;
+      width: 52px;
+      height: 52px;
+    }
+    .process-step-icon {
+      position: relative;
+      z-index: 2;
+      width: 52px;
+      height: 52px;
       border-radius: 50%;
-      background: var(--color-main);
-      color: var(--color-white);
-      font-family: var(--font-brand);
-      font-size: 18px;
-      font-weight: 400;
       display: flex;
       align-items: center;
       justify-content: center;
-      flex-shrink: 0;
-    }
-    .process-body { padding-top: 8px; }
-    .process-step-label {
-      font-size: 11px;
-      letter-spacing: 0.2em;
-      color: var(--color-main);
       font-family: var(--font-brand);
-      text-transform: uppercase;
-      margin-bottom: 4px;
+      font-size: 15px;
+      font-weight: 500;
+      color: var(--color-white);
+      letter-spacing: 1px;
     }
-    .process-title {
-      font-family: var(--font-ja-serif);
-      font-size: 18px;
-      font-weight: 400;
-      margin-bottom: 8px;
+    .process-step-icon-sage {
+      background: var(--color-main);
+      box-shadow: 0 4px 12px rgba(143, 175, 138, 0.25);
     }
-    .process-desc {
+    .process-step-icon-rose {
+      background: var(--color-accent);
+      box-shadow: 0 4px 12px rgba(201, 130, 122, 0.3);
+    }
+    .process-pulse {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 52px;
+      height: 52px;
+      border-radius: 50%;
+      opacity: 0;
+    }
+    .process-pulse-sage { border: 2px solid var(--color-main); }
+    .process-pulse-rose { border: 2px solid var(--color-accent); }
+    .process-step.is-visible .process-pulse {
+      animation-name: process-pulse-ring;
+      animation-duration: 1.8s;
+      animation-timing-function: ease-out;
+      animation-iteration-count: 1;
+      animation-fill-mode: none;
+      animation-delay: calc(var(--step-delay, 0s) + 0.3s);
+    }
+    @keyframes process-pulse-ring {
+      0%   { transform: scale(1);   opacity: 0.6; }
+      100% { transform: scale(1.8); opacity: 0; }
+    }
+    .process-step-content {
+      flex: 1;
+      padding-top: 0.3rem;
+    }
+    .process-step-eyebrow {
+      font-size: 10px;
+      letter-spacing: 3px;
+      margin: 0 0 0.5rem;
+      font-weight: 500;
+    }
+    .process-step-eyebrow-sage { color: var(--color-main); }
+    .process-step-eyebrow-rose { color: var(--color-accent); }
+    .process-step-title {
+      font-size: 19px;
+      font-weight: 500;
+      color: var(--color-text);
+      margin: 0 0 0.6rem;
+      letter-spacing: 0.02em;
+    }
+    .process-step-description {
       font-size: 14px;
+      color: #5f5e5a;
+      margin: 0;
       line-height: 1.9;
-      color: #5A5A5A;
+    }
+    @media (max-width: 640px) {
+      .process-timeline { padding-left: 0.5rem; }
+      .process-wave { width: 48px; }
+      .process-step { gap: 1rem; margin-bottom: 2.5rem; }
+      .process-step-icon,
+      .process-step-icon-wrapper,
+      .process-pulse { width: 44px; height: 44px; }
+      .process-step-icon { font-size: 13px; }
+      .process-step-title { font-size: 17px; }
+      .process-step-description { font-size: 13px; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .process-step {
+        opacity: 1;
+        transform: translateY(0);
+        transition: none;
+      }
+      .process-wave path {
+        stroke-dashoffset: 0;
+        transition: none;
+      }
+      .process-pulse { display: none; }
     }
 
     /* ===========================
@@ -1553,47 +1685,72 @@
       <div class="section-header fade-up">
         <span class="section-label">Service &amp; Price</span>
         <h2 class="section-title">サービスメニュー</h2>
-        <p class="section-subtitle">ホームページはセットプラン、LPやLINE設定は単品でもご依頼いただけます。<br>※プラン内容・価格は目安です。ご状況に合わせて柔軟にカスタマイズ可能。</p>
+        <p class="section-subtitle">LP制作からLINE連携・自動化まで、あなたのフェーズに合わせてお選びいただけます。<br>※プラン内容・価格は目安です。ご状況に合わせて柔軟にカスタマイズ可能。</p>
       </div>
 
-      <h3 class="single-title fade-up" style="text-align:center;border-bottom:none;">ホームページ制作セットプラン</h3>
+      <h3 class="single-title fade-up" style="text-align:center;border-bottom:none;">LP制作セットプラン</h3>
 
       <div class="pack-grid">
         <div class="pack-card fade-up delay-1">
           <h3 class="pack-name">Light</h3>
-          <div class="pack-price">¥198,000<span>（税込）</span></div>
-          <p class="pack-content">
-            ✓ ホームページ制作（5ページ）<br>
-            ✓ LINE公式アカウント構築<br>
-            ✓ お問い合わせフォーム設置<br>
-            ✓ 初期設定サポート<br><br>
-            <span style="color:#6B6B6B;font-size:13px;">基本の集客導線を整えたい方に。</span>
-          </p>
+          <div class="pack-price">¥64,800<span>（税込）</span></div>
+          <ul class="pack-list">
+            <li>✓ LP 1ページ制作（簡易構成）</li>
+            <li>✓ Vercel公開まで対応</li>
+            <li>✓ 初期設定サポート</li>
+          </ul>
+          <p class="pack-catch">基本の集客導線を整えたい方に。</p>
           <a href="#cta-mid" class="btn btn-outline">無料相談へ</a>
         </div>
         <div class="pack-card featured fade-up delay-2">
           <div class="pack-badge">⭐ おすすめ</div>
           <h3 class="pack-name">Standard</h3>
-          <div class="pack-price">¥258,000<span>（税込）</span></div>
-          <p class="pack-content">
-            ✓ Lightの内容すべて<br>
-            ✓ スプレッドシート × LINE連携<br>
-            ✓ 顧客データ自動管理<br>
-            ✓ <strong>メンタルサポート付き</strong><br><br>
-            <span style="color:#6B6B6B;font-size:13px;">顧客管理＋内側の整えも同時に進めたい方に。</span>
-          </p>
+          <div class="pack-price">¥198,000<span>（税込）</span></div>
+          <ul class="pack-list">
+            <li>✓ LP制作 + LINE公式アカウント構築</li>
+            <li>✓ スプレッドシート × LINE連携</li>
+            <li>✓ 顧客データ自動管理</li>
+            <li>✓ メンタルサポート付き<br><span class="pack-sub">（60分 × 2回 / 1ヶ月）</span></li>
+            <li>✓ オリジナルPDF特典 全8本セット
+              <button class="pdf-toggle" aria-expanded="false">詳細を見る ▾</button>
+              <ul class="pdf-list" hidden>
+                <li>1. お金のブロック解体</li>
+                <li>2. 親から受け取ったブロック解体ワーク</li>
+                <li>3. 自己価値の回復</li>
+                <li>4. 承認欲求との向き合い方</li>
+                <li>5. アファメーション設計ガイド</li>
+                <li>6. ジャーナリングテンプレ</li>
+                <li>7. 願望実現の地図</li>
+                <li>8. ブレないメンタルの作り方</li>
+              </ul>
+            </li>
+          </ul>
+          <p class="pack-catch">顧客管理＋内側の整えも同時に進めたい方に。</p>
           <a href="#cta-mid" class="btn btn-accent">無料相談へ</a>
         </div>
         <div class="pack-card fade-up delay-3">
           <h3 class="pack-name">Full</h3>
           <div class="pack-price">¥298,000<span>（税込）</span></div>
-          <p class="pack-content">
-            ✓ Standardの内容すべて<br>
-            ✓ GAS自動化システム構築<br>
-            ✓ 自動返信・自動予約対応<br>
-            ✓ <strong>メンタルサポート付き</strong><br><br>
-            <span style="color:#6B6B6B;font-size:13px;">完全自走型の仕組みで、時間とエネルギーを本業に。</span>
-          </p>
+          <ul class="pack-list">
+            <li>✓ Standardの内容すべて</li>
+            <li>✓ GAS自動化システム構築</li>
+            <li>✓ 自動返信・自動予約対応</li>
+            <li>✓ メンタルサポート付き<br><span class="pack-sub">（60分 × 4回 / 2ヶ月）</span></li>
+            <li>✓ オリジナルPDF特典 全8本セット
+              <button class="pdf-toggle" aria-expanded="false">詳細を見る ▾</button>
+              <ul class="pdf-list" hidden>
+                <li>1. お金のブロック解体</li>
+                <li>2. 親から受け取ったブロック解体ワーク</li>
+                <li>3. 自己価値の回復</li>
+                <li>4. 承認欲求との向き合い方</li>
+                <li>5. アファメーション設計ガイド</li>
+                <li>6. ジャーナリングテンプレ</li>
+                <li>7. 願望実現の地図</li>
+                <li>8. ブレないメンタルの作り方</li>
+              </ul>
+            </li>
+          </ul>
+          <p class="pack-catch">完全自走型の仕組みで、時間とエネルギーを本業に。</p>
           <a href="#cta-mid" class="btn btn-outline">無料相談へ</a>
         </div>
       </div>
@@ -1663,40 +1820,75 @@
         <h2 class="section-title">ご依頼からお渡しまで</h2>
         <p class="section-subtitle">丁寧にヒアリングし、あなただけの導線を設計・納品します。</p>
       </div>
-      <div class="process-list">
-        <div class="process-item fade-up">
-          <div class="process-num">01</div>
-          <div class="process-body">
-            <span class="process-step-label">Step 01</span>
-            <h3 class="process-title">ヒアリング</h3>
-            <p class="process-desc">現状・目標・ご要望をフォームでお聞きします。</p>
+
+      <div class="process-timeline" id="process-timeline">
+        <!-- 波形SVGライン -->
+        <svg class="process-wave" viewBox="0 0 100 600" preserveAspectRatio="none" aria-hidden="true">
+          <defs>
+            <linearGradient id="waveGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+              <stop offset="0%" stop-color="#8FAF8A" stop-opacity="0.4" />
+              <stop offset="50%" stop-color="#C4A882" stop-opacity="0.5" />
+              <stop offset="100%" stop-color="#C9827A" stop-opacity="0.5" />
+            </linearGradient>
+          </defs>
+          <path
+            d="M 50 20 C 80 100, 20 180, 50 260 C 80 340, 20 420, 50 500 C 70 540, 50 580, 50 600"
+            stroke="url(#waveGradient)"
+            stroke-width="2"
+            fill="none"
+            stroke-linecap="round"
+          />
+        </svg>
+
+        <!-- STEP 01 -->
+        <div class="process-step" style="--step-delay: 0s;">
+          <div class="process-step-icon-wrapper">
+            <span class="process-pulse process-pulse-sage" aria-hidden="true"></span>
+            <div class="process-step-icon process-step-icon-sage">01</div>
+          </div>
+          <div class="process-step-content">
+            <p class="process-step-eyebrow process-step-eyebrow-sage">STEP 01</p>
+            <h3 class="process-step-title">ヒアリング</h3>
+            <p class="process-step-description">現状・目標・ご要望をフォームでお聞きします。</p>
           </div>
         </div>
-        <div class="process-item fade-up">
-          <div class="process-num">02</div>
-          <div class="process-body">
-            <span class="process-step-label">Step 02</span>
-            <h3 class="process-title">提案・お見積り</h3>
-            <p class="process-desc">現状分析をもとに最適なプランをご提案。ご納得いただいてから正式契約です。</p>
+
+        <!-- STEP 02 -->
+        <div class="process-step" style="--step-delay: 0.3s;">
+          <div class="process-step-icon-wrapper">
+            <span class="process-pulse process-pulse-sage" aria-hidden="true"></span>
+            <div class="process-step-icon process-step-icon-sage">02</div>
+          </div>
+          <div class="process-step-content">
+            <p class="process-step-eyebrow process-step-eyebrow-sage">STEP 02</p>
+            <h3 class="process-step-title">提案・お見積り</h3>
+            <p class="process-step-description">現状分析をもとに最適なプランをご提案。ご納得いただいてから正式契約です。</p>
           </div>
         </div>
-        <div class="process-item fade-up">
-          <div class="process-num">03</div>
-          <div class="process-body">
-            <span class="process-step-label">Step 03</span>
-            <h3 class="process-title">制作スタート</h3>
-            <p class="process-desc">LP・LINE・GASを連携した導線ごと設計・制作。進捗は随時共有します。</p>
+
+        <!-- STEP 03 -->
+        <div class="process-step" style="--step-delay: 0.6s;">
+          <div class="process-step-icon-wrapper">
+            <span class="process-pulse process-pulse-sage" aria-hidden="true"></span>
+            <div class="process-step-icon process-step-icon-sage">03</div>
+          </div>
+          <div class="process-step-content">
+            <p class="process-step-eyebrow process-step-eyebrow-sage">STEP 03</p>
+            <h3 class="process-step-title">制作スタート</h3>
+            <p class="process-step-description">LP・LINE・GASを連携した導線ごと設計・制作。進捗は随時共有します。</p>
           </div>
         </div>
-        <div class="process-item fade-up">
-          <div class="process-num">04</div>
-          <div class="process-body">
-            <span class="process-step-label">Step 04</span>
-            <h3 class="process-title">納品・初期説明</h3>
-            <p class="process-desc">完成後に丁寧にご説明。すぐ使える状態でお渡しします。</p>
+
+        <!-- STEP 04（ゴール強調・ローズカラー） -->
+        <div class="process-step" style="--step-delay: 0.9s;">
+          <div class="process-step-icon-wrapper">
+            <span class="process-pulse process-pulse-rose" aria-hidden="true"></span>
+            <div class="process-step-icon process-step-icon-rose">04</div>
           </div>
-        </div>
-       
+          <div class="process-step-content">
+            <p class="process-step-eyebrow process-step-eyebrow-rose">STEP 04</p>
+            <h3 class="process-step-title">納品・初期説明</h3>
+            <p class="process-step-description">完成後に丁寧にご説明。すぐ使える状態でお渡しします。</p>
           </div>
         </div>
       </div>
@@ -1878,6 +2070,24 @@
       setTimeout(function() { el.classList.add('visible'); }, 200 + i * 160);
     });
 
+    // PDF detail accordion
+    document.querySelectorAll('.pdf-toggle').forEach(function(btn) {
+      btn.addEventListener('click', function(e) {
+        e.stopPropagation();
+        var list = btn.nextElementSibling;
+        var expanded = btn.getAttribute('aria-expanded') === 'true';
+        if (expanded) {
+          btn.setAttribute('aria-expanded', 'false');
+          btn.textContent = '詳細を見る ▾';
+          list.hidden = true;
+        } else {
+          btn.setAttribute('aria-expanded', 'true');
+          btn.textContent = '閉じる ▴';
+          list.hidden = false;
+        }
+      });
+    });
+
     // FAQ accordion
     document.querySelectorAll('.faq-question').forEach(function(q) {
       q.addEventListener('click', function() {
@@ -1893,6 +2103,49 @@
         });
       });
     });
+
+    // Process timeline animation
+    (function() {
+      var timeline = document.getElementById('process-timeline');
+      if (!timeline) return;
+
+      // SVGのheight:100%はautoな親で計算がズレるブラウザ対策 — JSで明示セット
+      function syncWaveHeight() {
+        var waveEl = timeline.querySelector('.process-wave');
+        if (waveEl) waveEl.style.height = timeline.offsetHeight + 'px';
+      }
+      syncWaveHeight();
+      window.addEventListener('resize', syncWaveHeight);
+
+      function activateProcess() {
+        timeline.querySelector('.process-wave').classList.add('is-animated');
+        timeline.querySelectorAll('.process-step').forEach(function(step) {
+          step.classList.add('is-visible');
+        });
+      }
+
+      var prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      if (prefersReduced) {
+        activateProcess();
+        return;
+      }
+
+      if (!('IntersectionObserver' in window)) {
+        activateProcess();
+        return;
+      }
+
+      var processObs = new IntersectionObserver(function(entries) {
+        if (entries[0].isIntersecting) {
+          activateProcess();
+          processObs.disconnect();
+        }
+      }, {
+        threshold: 0.05,         // 5%見えたら発火（旧: 15%）
+        rootMargin: '0px 0px -40px 0px'  // 控えめなオフセット（旧: -80px）
+      });
+      processObs.observe(timeline);
+    }());
 
     // Header scroll shadow
     window.addEventListener('scroll', function() {
