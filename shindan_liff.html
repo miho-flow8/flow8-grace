@@ -432,22 +432,30 @@ const choiceScores  = [2, 1, 0];
 async function initLiff() {
   try {
     await liff.init({ liffId: LIFF_ID });
+
     if (!liff.isLoggedIn()) {
       liff.login();
       return;
     }
+
+    // アクセストークン確認
+    const token = liff.getAccessToken();
+    console.log('accessToken:', token ? token.substring(0, 20) + '...' : 'null');
+
     const profile = await liff.getProfile();
+    console.log('profile:', JSON.stringify(profile));
+
     lineUserId = profile.userId;
     lineDisplayName = profile.displayName;
 
     document.getElementById('user-name').textContent = `${lineDisplayName} さん`;
     document.getElementById('loading').style.display = 'none';
     document.getElementById('cover').style.display = 'flex';
+
   } catch (e) {
     console.error('LIFF init error:', e);
-    // 開発・テスト時はLIFF無しで動作
-    lineUserId = 'test_user';
-    lineDisplayName = 'テストユーザー';
+    lineUserId = 'test_user_' + Date.now();
+    lineDisplayName = 'ゲスト';
     document.getElementById('user-name').textContent = 'ようこそ！';
     document.getElementById('loading').style.display = 'none';
     document.getElementById('cover').style.display = 'flex';
