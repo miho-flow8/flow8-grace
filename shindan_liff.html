@@ -532,7 +532,7 @@ async function submitResult() {
   try {
     await fetch(GAS_URL, {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      headers: { 'Content-Type': 'text/plain' },
       body: JSON.stringify({
         lineUserId,
         lineDisplayName,
@@ -540,7 +540,6 @@ async function submitResult() {
         scores,
         timestamp: new Date().toISOString(),
       }),
-      mode: 'no-cors', // GASのCORS制限に対応
     });
   } catch (e) {
     console.error('送信エラー（結果表示は続行）:', e);
