@@ -203,14 +203,6 @@
   .score-track { flex: 1; height: 8px; background: #eee; border-radius: 8px; overflow: hidden; }
   .score-fill { height: 100%; border-radius: 8px; transition: width 1s ease 0.5s; }
   .score-pct { font-size: 12px; font-weight: 700; color: var(--text); width: 34px; text-align: right; }
-  .line-btn {
-    display: block; width: 100%; background: #06C755; border: none; border-radius: 50px;
-    padding: 18px; font-size: 16px; font-weight: 700; font-family: 'Noto Sans JP', sans-serif;
-    color: white; cursor: pointer; text-align: center; text-decoration: none;
-    margin-bottom: 16px; box-shadow: 0 8px 24px rgba(6,199,85,0.35);
-    transition: all 0.3s ease; letter-spacing: 1px;
-  }
-  .line-btn:hover { transform: translateY(-2px); box-shadow: 0 12px 32px rgba(6,199,85,0.45); }
   .retry-btn {
     width: 100%; background: none; border: 2px solid #ddd; border-radius: 50px;
     padding: 16px; font-size: 14px; font-family: 'Noto Sans JP', sans-serif;
@@ -295,7 +287,10 @@
       <h3>タイプ別スコア</h3>
       <div id="score-bars"></div>
     </div>
-    <button class="line-btn" onclick="onLineButtonClick()">LINEで結果を受け取る 💬</button>
+    <a href="https://line.me/R/oaMessage/@860rfuzb"
+       style="display:block;background:#06C755;color:white;text-align:center;padding:18px;border-radius:50px;font-size:16px;font-weight:700;text-decoration:none;margin-bottom:16px;">
+      💬 LINEで結果を受け取る
+    </a>
     <button class="retry-btn" onclick="retryQuiz()">もう一度診断する</button>
   </div>
 </div>
@@ -303,7 +298,6 @@
 <script>
 // ===== CONFIG =====
 const GAS_URL = 'https://script.google.com/macros/s/AKfycbxqT3wYwO0qNn4hUI-2Aw024svpFd9CGtIKTqQ4RLCvNwpE6Xif3lCIanEQB0Qch_CN/exec';
-const LINE_ACCOUNT_ID = '@アカウントID';
 
 // ===== 質問データ =====
 const questions = [
@@ -447,21 +441,13 @@ function calcScores() {
 }
 
 // ===== 結果画面へ遷移 =====
-function submitResult() {
+async function submitResult() {
   document.getElementById('quiz').style.display = 'none';
   document.getElementById('sending').style.display = 'flex';
 
   resultScores = calcScores();
   resultWinner = Object.entries(resultScores).reduce((a, b) => a[1] >= b[1] ? a : b)[0];
 
-  setTimeout(() => {
-    document.getElementById('sending').style.display = 'none';
-    showResult(resultScores, resultWinner);
-  }, 1800);
-}
-
-// ===== LINEボタンタップ時：GAS送信 → LINE誘導 =====
-async function onLineButtonClick() {
   try {
     await fetch(GAS_URL, {
       method: 'POST',
@@ -475,7 +461,11 @@ async function onLineButtonClick() {
   } catch (e) {
     console.error('GAS送信エラー:', e);
   }
-  window.open('https://line.me/R/oaMessage/' + LINE_ACCOUNT_ID, '_blank');
+
+  setTimeout(() => {
+    document.getElementById('sending').style.display = 'none';
+    showResult(resultScores, resultWinner);
+  }, 1800);
 }
 
 // ===== 結果表示 =====
