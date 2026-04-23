@@ -454,9 +454,10 @@ async function initLiff() {
 
   } catch (e) {
     console.error('LIFF init error:', e);
+    alert('LIFFエラー: ' + e.message);
     lineUserId = 'test_user_' + Date.now();
     lineDisplayName = 'ゲスト';
-    document.getElementById('user-name').textContent = 'ようこそ！';
+    document.getElementById('user-name').textContent = 'ゲスト';
     document.getElementById('loading').style.display = 'none';
     document.getElementById('cover').style.display = 'flex';
   }
