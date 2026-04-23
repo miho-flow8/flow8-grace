@@ -1,0 +1,597 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>稼げないブレーキ診断 | flow8-grace</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700&family=Playfair+Display:ital@0;1&display=swap" rel="stylesheet">
+<!-- LIFF SDK -->
+<script src="https://static.line-sgi.com/liff/edge/versions/liff-2.22.3.js"></script>
+<style>
+  :root {
+    --off-white: #EFEBE0;
+    --sage: #8FAF8A;
+    --rose: #C9827A;
+    --gold: #C4A882;
+    --dark: #1a1a1a;
+    --mid: #2d2d2d;
+    --text: #3a3a3a;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: 'Noto Sans JP', sans-serif;
+    background: var(--off-white);
+    color: var(--text);
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* ===== LOADING ===== */
+  #loading {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(160deg, #1a1a1a 0%, #2a2320 100%);
+    gap: 20px;
+  }
+  .loading-logo {
+    font-family: 'Playfair Display', serif;
+    font-size: 28px;
+    color: var(--gold);
+    letter-spacing: 2px;
+  }
+  .loading-spinner {
+    width: 36px; height: 36px;
+    border: 3px solid rgba(196,168,130,0.2);
+    border-top-color: var(--gold);
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+  }
+  .loading-text { font-size: 13px; color: rgba(239,235,224,0.5); letter-spacing: 1px; }
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  /* ===== COVER ===== */
+  #cover {
+    display: none;
+    min-height: 100vh;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 48px 24px;
+    background: linear-gradient(160deg, #1a1a1a 0%, #2a2320 60%, #1a1a1a 100%);
+    position: relative;
+    overflow: hidden;
+  }
+  #cover::before {
+    content: '∞';
+    position: absolute;
+    font-size: 400px;
+    color: rgba(196,168,130,0.04);
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    font-family: 'Playfair Display', serif;
+    pointer-events: none;
+  }
+  .cover-badge {
+    font-size: 11px; letter-spacing: 3px; color: var(--gold);
+    text-transform: uppercase; border: 1px solid var(--gold);
+    padding: 6px 16px; border-radius: 40px; margin-bottom: 28px;
+  }
+  .cover-title {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(28px, 8vw, 42px);
+    color: var(--off-white); text-align: center; line-height: 1.3; margin-bottom: 8px;
+  }
+  .cover-sub { font-size: 13px; color: var(--gold); text-align: center; letter-spacing: 1px; margin-bottom: 32px; }
+  .cover-welcome {
+    background: rgba(196,168,130,0.12);
+    border: 1px solid rgba(196,168,130,0.25);
+    border-radius: 16px; padding: 16px 20px;
+    margin-bottom: 28px; text-align: center; max-width: 320px; width: 100%;
+  }
+  .cover-welcome .name { font-size: 15px; color: var(--off-white); font-weight: 700; margin-bottom: 4px; }
+  .cover-welcome .sub { font-size: 12px; color: rgba(239,235,224,0.5); }
+  .cover-desc {
+    font-size: 14px; color: rgba(239,235,224,0.7);
+    text-align: center; line-height: 1.9; max-width: 320px; margin-bottom: 36px;
+  }
+  .types-preview {
+    display: grid; grid-template-columns: 1fr 1fr;
+    gap: 10px; max-width: 320px; width: 100%; margin-bottom: 40px;
+  }
+  .type-chip {
+    background: rgba(196,168,130,0.1);
+    border: 1px solid rgba(196,168,130,0.25);
+    border-radius: 12px; padding: 12px 14px; text-align: center;
+  }
+  .type-chip .emoji { font-size: 20px; display: block; margin-bottom: 4px; }
+  .type-chip .name { font-size: 11px; color: var(--off-white); }
+  .start-btn {
+    background: linear-gradient(135deg, var(--sage) 0%, #7a9e75 100%);
+    color: white; border: none; padding: 18px 48px; border-radius: 50px;
+    font-size: 16px; font-weight: 700; font-family: 'Noto Sans JP', sans-serif;
+    cursor: pointer; letter-spacing: 1px;
+    box-shadow: 0 8px 32px rgba(143,175,138,0.35);
+    transition: all 0.3s ease; width: 100%; max-width: 300px;
+  }
+  .start-btn:hover { transform: translateY(-2px); }
+  .cover-note { margin-top: 20px; font-size: 12px; color: rgba(239,235,224,0.4); text-align: center; }
+
+  /* ===== QUIZ ===== */
+  #quiz { display: none; min-height: 100vh; }
+  .progress-bar-wrap {
+    position: sticky; top: 0; z-index: 10;
+    background: white; padding: 16px 24px 12px;
+    border-bottom: 1px solid rgba(0,0,0,0.06);
+  }
+  .progress-info { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
+  .progress-label { font-size: 12px; color: #999; }
+  .progress-num { font-size: 13px; font-weight: 700; color: var(--sage); }
+  .progress-track { height: 4px; background: #eee; border-radius: 4px; overflow: hidden; }
+  .progress-fill {
+    height: 100%; background: linear-gradient(90deg, var(--sage), var(--gold));
+    border-radius: 4px; transition: width 0.4s ease;
+  }
+  .quiz-body { padding: 32px 24px 100px; max-width: 480px; margin: 0 auto; }
+  .q-section-label { font-size: 10px; letter-spacing: 3px; color: var(--rose); text-transform: uppercase; margin-bottom: 12px; font-weight: 700; }
+  .q-text { font-size: 18px; font-weight: 700; line-height: 1.6; color: var(--dark); margin-bottom: 36px; min-height: 60px; }
+  .choices { display: flex; flex-direction: column; gap: 14px; }
+  .choice-btn {
+    background: white; border: 2px solid #e8e4db; border-radius: 16px;
+    padding: 18px 20px; font-size: 15px; font-family: 'Noto Sans JP', sans-serif;
+    color: var(--text); cursor: pointer; text-align: left;
+    transition: all 0.2s ease; display: flex; align-items: center; gap: 14px;
+  }
+  .choice-btn:hover { border-color: var(--sage); transform: translateX(4px); }
+  .choice-btn.selected { border-color: var(--sage); background: #f0f6ef; }
+  .choice-btn.selected .choice-dot { background: var(--sage); border-color: var(--sage); }
+  .choice-btn.selected .choice-dot::after { opacity: 1; }
+  .choice-dot {
+    width: 22px; height: 22px; border-radius: 50%; border: 2px solid #ddd;
+    flex-shrink: 0; display: flex; align-items: center; justify-content: center; transition: all 0.2s;
+  }
+  .choice-dot::after {
+    content: ''; width: 10px; height: 10px; border-radius: 50%;
+    background: white; opacity: 0; transition: opacity 0.2s;
+  }
+  .choice-label { font-weight: 500; }
+  .nav-wrap {
+    position: fixed; bottom: 0; left: 50%; transform: translateX(-50%);
+    background: white; border-top: 1px solid #eee;
+    padding: 16px 24px; display: flex; justify-content: space-between; align-items: center;
+    width: 100%; max-width: 480px;
+  }
+  .nav-back {
+    background: none; border: 1.5px solid #ddd; border-radius: 50px;
+    padding: 12px 24px; font-size: 14px; font-family: 'Noto Sans JP', sans-serif;
+    color: #999; cursor: pointer; transition: all 0.2s;
+  }
+  .nav-back:hover { border-color: var(--text); color: var(--text); }
+  .nav-next {
+    background: linear-gradient(135deg, var(--sage), #7a9e75);
+    border: none; border-radius: 50px; padding: 14px 36px;
+    font-size: 15px; font-weight: 700; font-family: 'Noto Sans JP', sans-serif;
+    color: white; cursor: pointer; transition: all 0.3s;
+    opacity: 0.4; pointer-events: none;
+    box-shadow: 0 4px 20px rgba(143,175,138,0.3);
+  }
+  .nav-next.active { opacity: 1; pointer-events: auto; }
+  .nav-next.active:hover { transform: translateY(-2px); }
+
+  /* ===== SENDING ===== */
+  #sending {
+    display: none; min-height: 100vh;
+    flex-direction: column; align-items: center; justify-content: center;
+    background: linear-gradient(160deg, #1a1a1a 0%, #2a2320 100%);
+    gap: 24px;
+  }
+  .sending-spinner {
+    width: 48px; height: 48px;
+    border: 3px solid rgba(143,175,138,0.2);
+    border-top-color: var(--sage);
+    border-radius: 50%; animation: spin 0.8s linear infinite;
+  }
+  .sending-text { font-size: 15px; color: var(--off-white); letter-spacing: 1px; }
+  .sending-sub { font-size: 12px; color: rgba(239,235,224,0.4); }
+
+  /* ===== RESULT ===== */
+  #result { display: none; }
+  .result-hero {
+    background: linear-gradient(160deg, #1a1a1a 0%, #2a2320 100%);
+    padding: 56px 24px 48px; text-align: center; position: relative; overflow: hidden;
+  }
+  .result-hero::before {
+    content: attr(data-emoji); position: absolute;
+    font-size: 200px; top: 50%; left: 50%;
+    transform: translate(-50%, -50%); opacity: 0.06; pointer-events: none;
+  }
+  .result-label { font-size: 11px; letter-spacing: 3px; color: var(--gold); text-transform: uppercase; margin-bottom: 20px; }
+  .result-emoji { font-size: 64px; margin-bottom: 16px; display: block; }
+  .result-type-name { font-family: 'Playfair Display', serif; font-size: clamp(26px, 7vw, 36px); color: var(--off-white); margin-bottom: 8px; }
+  .result-block-label { font-size: 12px; color: var(--rose); letter-spacing: 2px; margin-bottom: 8px; margin-top: 24px; font-weight: 700; }
+  .result-block-text { font-size: 20px; font-weight: 700; color: var(--gold); font-family: 'Playfair Display', serif; font-style: italic; }
+  .result-line-notice {
+    background: rgba(0,185,0,0.15); border: 1px solid rgba(0,185,0,0.3);
+    border-radius: 12px; padding: 14px 20px; margin-top: 28px;
+    display: inline-flex; align-items: center; gap: 10px;
+  }
+  .result-line-notice .icon { font-size: 20px; }
+  .result-line-notice .txt { font-size: 13px; color: #7fff7f; line-height: 1.5; text-align: left; }
+  .result-body { padding: 40px 24px 60px; max-width: 480px; margin: 0 auto; }
+  .result-desc-card {
+    background: white; border-radius: 20px; padding: 28px 24px; margin-bottom: 24px;
+    border-left: 4px solid var(--sage); box-shadow: 0 4px 24px rgba(0,0,0,0.06);
+  }
+  .result-desc-card h3 { font-size: 13px; color: var(--sage); letter-spacing: 2px; margin-bottom: 14px; font-weight: 700; }
+  .result-desc-card p { font-size: 15px; line-height: 1.9; color: var(--text); }
+  .result-pattern-card {
+    background: white; border-radius: 20px; padding: 28px 24px; margin-bottom: 24px;
+    border-left: 4px solid var(--rose); box-shadow: 0 4px 24px rgba(0,0,0,0.06);
+  }
+  .result-pattern-card h3 { font-size: 13px; color: var(--rose); letter-spacing: 2px; margin-bottom: 14px; font-weight: 700; }
+  .result-pattern-card ul { list-style: none; display: flex; flex-direction: column; gap: 10px; }
+  .result-pattern-card li { font-size: 14px; line-height: 1.7; color: var(--text); display: flex; gap: 8px; }
+  .result-pattern-card li::before { content: '✦'; color: var(--rose); flex-shrink: 0; margin-top: 2px; font-size: 10px; }
+  .score-bar-section {
+    background: white; border-radius: 20px; padding: 24px; margin-bottom: 24px;
+    box-shadow: 0 4px 24px rgba(0,0,0,0.06);
+  }
+  .score-bar-section h3 { font-size: 13px; color: #999; letter-spacing: 2px; margin-bottom: 20px; font-weight: 700; }
+  .score-row { display: flex; align-items: center; gap: 12px; margin-bottom: 14px; }
+  .score-row:last-child { margin-bottom: 0; }
+  .score-emoji { font-size: 18px; width: 24px; text-align: center; }
+  .score-name { font-size: 12px; color: #666; width: 70px; flex-shrink: 0; }
+  .score-track { flex: 1; height: 8px; background: #eee; border-radius: 8px; overflow: hidden; }
+  .score-fill { height: 100%; border-radius: 8px; transition: width 1s ease 0.5s; }
+  .score-pct { font-size: 12px; font-weight: 700; color: var(--text); width: 34px; text-align: right; }
+  .retry-btn {
+    width: 100%; background: none; border: 2px solid #ddd; border-radius: 50px;
+    padding: 16px; font-size: 14px; font-family: 'Noto Sans JP', sans-serif;
+    color: #999; cursor: pointer; margin-top: 8px; transition: all 0.2s;
+  }
+  .retry-btn:hover { border-color: var(--text); color: var(--text); }
+
+  @keyframes fadeUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+  .fade-up { animation: fadeUp 0.5s ease forwards; }
+  .quiz-question { animation: fadeUp 0.35s ease; }
+</style>
+</head>
+<body>
+
+<!-- LOADING -->
+<div id="loading">
+  <div class="loading-logo">flow8-grace</div>
+  <div class="loading-spinner"></div>
+  <div class="loading-text">Loading...</div>
+</div>
+
+<!-- COVER -->
+<div id="cover">
+  <div class="cover-badge">flow8-grace × 引き寄せ診断</div>
+  <h1 class="cover-title">あなたの「稼げない<br>ブレーキ」診断</h1>
+  <p class="cover-sub">30 Questions · 約5分</p>
+  <div class="cover-welcome">
+    <div class="name" id="user-name">ようこそ！</div>
+    <div class="sub">LINEアカウントで参加中</div>
+  </div>
+  <p class="cover-desc">頑張っているのに結果が出ない。<br>その理由は行動量じゃなくて<br><strong style="color:var(--gold)">心の奥にあるブロック</strong>かもしれない。</p>
+  <div class="types-preview">
+    <div class="type-chip"><span class="emoji">🔥</span><span class="name">行動過多タイプ</span></div>
+    <div class="type-chip"><span class="emoji">🌀</span><span class="name">思考ループタイプ</span></div>
+    <div class="type-chip"><span class="emoji">☁️</span><span class="name">自己否定タイプ</span></div>
+    <div class="type-chip"><span class="emoji">🎭</span><span class="name">他人軸タイプ</span></div>
+  </div>
+  <button class="start-btn" onclick="startQuiz()">診断をスタートする →</button>
+  <p class="cover-note">全30問 / 選択式 / 無料</p>
+</div>
+
+<!-- QUIZ -->
+<div id="quiz">
+  <div class="progress-bar-wrap">
+    <div class="progress-info">
+      <span class="progress-label">進捗</span>
+      <span class="progress-num" id="progress-num">1 / 30</span>
+    </div>
+    <div class="progress-track">
+      <div class="progress-fill" id="progress-fill" style="width:3.3%"></div>
+    </div>
+  </div>
+  <div class="quiz-body">
+    <div class="quiz-question">
+      <div class="q-section-label" id="q-section"></div>
+      <div class="q-text" id="q-text"></div>
+      <div class="choices" id="choices"></div>
+    </div>
+  </div>
+  <div class="nav-wrap">
+    <button class="nav-back" id="nav-back" onclick="prevQ()">← 戻る</button>
+    <button class="nav-next" id="nav-next" onclick="nextQ()">次へ →</button>
+  </div>
+</div>
+
+<!-- SENDING -->
+<div id="sending">
+  <div class="sending-spinner"></div>
+  <div class="sending-text">結果を解析中...</div>
+  <div class="sending-sub">LINEに結果をお届けします</div>
+</div>
+
+<!-- RESULT -->
+<div id="result">
+  <div class="result-hero" id="result-hero">
+    <div class="result-label">YOUR TYPE</div>
+    <span class="result-emoji" id="result-emoji"></span>
+    <div class="result-type-name" id="result-type-name"></div>
+    <div class="result-block-label">あなたのブロック</div>
+    <div class="result-block-text" id="result-block-text"></div>
+    <div class="result-line-notice">
+      <span class="icon">💬</span>
+      <div class="txt">詳細な結果＋Step1案内を<br>LINEにお届けしました！</div>
+    </div>
+  </div>
+  <div class="result-body">
+    <div class="result-desc-card fade-up">
+      <h3>TYPE PROFILE</h3>
+      <p id="result-desc"></p>
+    </div>
+    <div class="result-pattern-card fade-up">
+      <h3>あなたに多いパターン</h3>
+      <ul id="result-patterns"></ul>
+    </div>
+    <div class="score-bar-section fade-up">
+      <h3>タイプ別スコア</h3>
+      <div id="score-bars"></div>
+    </div>
+    <button class="retry-btn" onclick="retryQuiz()">もう一度診断する</button>
+  </div>
+</div>
+
+<script>
+// ===== CONFIG =====
+// ⚠️ 以下2つをデプロイ時に置き換えてください
+const LIFF_ID = 'YOUR_LIFF_ID';          // LINE DevelopersのLIFF ID
+const GAS_URL = 'YOUR_GAS_WEBAPP_URL';   // GASのウェブアプリURL
+
+// ===== 質問データ =====
+const questions = [
+  // 🔥 行動過多タイプ（8問）
+  { type:'A', section:'🔥 行動過多タイプ', text:'「何かしていないと不安」で、常に動き続けている' },
+  { type:'A', section:'🔥 行動過多タイプ', text:'休むことに罪悪感を感じる' },
+  { type:'A', section:'🔥 行動過多タイプ', text:'新しい施策・サービスをどんどん試すが、定着しないことが多い' },
+  { type:'A', section:'🔥 行動過多タイプ', text:'「頑張った量」と「結果」が比例していないと感じる' },
+  { type:'A', section:'🔥 行動過多タイプ', text:'忙しくしていることで、自分の価値を証明しようとする' },
+  { type:'A', section:'🔥 行動過多タイプ', text:'手を抜くことへの恐怖や抵抗感がある' },
+  { type:'A', section:'🔥 行動過多タイプ', text:'やることリストが常に増え続けている' },
+  { type:'A', section:'🔥 行動過多タイプ', text:'成果より「努力した自分」を先に評価しがち' },
+  // 🌀 思考ループタイプ（7問）
+  { type:'B', section:'🌀 思考ループタイプ', text:'行動する前に「うまくいかなかったら」と考えすぎてしまう' },
+  { type:'B', section:'🌀 思考ループタイプ', text:'完璧な準備が整うまで動けない' },
+  { type:'B', section:'🌀 思考ループタイプ', text:'リサーチや情報収集が長くなり、なかなか実行に移せない' },
+  { type:'B', section:'🌀 思考ループタイプ', text:'「あのとき○○すればよかった」と過去の失敗を繰り返し思い出す' },
+  { type:'B', section:'🌀 思考ループタイプ', text:'決断のタイミングで頭が真っ白になることがある' },
+  { type:'B', section:'🌀 思考ループタイプ', text:'同じ悩みを何度も考え、堂々巡りになる' },
+  { type:'B', section:'🌀 思考ループタイプ', text:'「失敗＝終わり」という感覚が頭の奥にある' },
+  // ☁️ 自己否定タイプ（8問）
+  { type:'C', section:'☁️ 自己否定タイプ', text:'「私なんかが…」という言葉が自然と出てくる' },
+  { type:'C', section:'☁️ 自己否定タイプ', text:'自分の実績・スキルを他人より低く見積もりがち' },
+  { type:'C', section:'☁️ 自己否定タイプ', text:'値上げや強気の提案に強い抵抗を感じる' },
+  { type:'C', section:'☁️ 自己否定タイプ', text:'褒められると「そんなことない」と即座に打ち消してしまう' },
+  { type:'C', section:'☁️ 自己否定タイプ', text:'「自分には特別な才能がない」と感じることが多い' },
+  { type:'C', section:'☁️ 自己否定タイプ', text:'自分を主語にして発信・発言することへの抵抗がある' },
+  { type:'C', section:'☁️ 自己否定タイプ', text:'他人の成功を見ると「やっぱり自分は違う」と感じる' },
+  { type:'C', section:'☁️ 自己否定タイプ', text:'自分の意見より他人のアドバイスの方が正しく思えてしまう' },
+  // 🎭 他人軸タイプ（7問）
+  { type:'D', section:'🎭 他人軸タイプ', text:'SNS投稿前に「どう思われるかな」と気になってなかなか投稿できない' },
+  { type:'D', section:'🎭 他人軸タイプ', text:'反応や「いいね」の数で自分の価値を測ってしまう' },
+  { type:'D', section:'🎭 他人軸タイプ', text:'嫌われることへの恐怖が、行動にブレーキをかけている' },
+  { type:'D', section:'🎭 他人軸タイプ', text:'周囲の目線が気になって、自分のやりたいことより「受け入れられること」を優先する' },
+  { type:'D', section:'🎭 他人軸タイプ', text:'誰かに批判されると、長時間引きずってしまう' },
+  { type:'D', section:'🎭 他人軸タイプ', text:'「目立ったら叩かれる」という感覚が心のどこかにある' },
+  { type:'D', section:'🎭 他人軸タイプ', text:'自分の意見を言う前に、相手の反応を先読みして言葉を選ぶ' },
+];
+
+const typeData = {
+  A: {
+    emoji: '🔥', name: '行動過多タイプ', block: '「頑張らないと価値がない」',
+    desc: 'あなたは誰よりも行動力があります。でも、その行動の裏側に「止まったら価値がなくなる」という恐れが潜んでいます。疲弊しながらも動き続けることで、本当に大切な「在り方」がぼやけてしまっているかもしれません。',
+    patterns: ['新しいことを始めるのは得意だが、継続・仕組み化が苦手','忙しいほど「頑張っている自分」を感じてホッとする','成果が出なくてもまず「もっと頑張ろう」と思う','休日でも仕事のことが頭から離れない'],
+    color: '#e8724a',
+  },
+  B: {
+    emoji: '🌀', name: '思考ループタイプ', block: '「失敗したら終わり」',
+    desc: '頭の中では何度もシミュレーションしている。でもなかなか一歩が踏み出せない。それはあなたが「慎重なだけ」じゃなく、心の奥で「失敗＝取り返しがつかない」という信念が動きを止めているサインです。',
+    patterns: ['アイデアは豊富だが、実行前に考えすぎて止まる','完璧な計画が立つまでスタートできない','過去の失敗を何度も思い出してしまう','うまくいかないシナリオを先に想像しやすい'],
+    color: '#5b8fcc',
+  },
+  C: {
+    emoji: '☁️', name: '自己否定タイプ', block: '「私には価値がない」',
+    desc: '能力は十分あるのに、自分でそれを認められない。「私なんか」という口癖の裏には、長い時間をかけて積み上げられた「自分には価値がない」という思い込みがあります。これはあなたの本当の姿ではありません。',
+    patterns: ['値段設定で自分を安く見積もってしまう','成果を出しても「たまたま」と思う','他の人の発信は素晴らしく見えて、自分は及ばないと感じる','褒め言葉を素直に受け取れない'],
+    color: '#9b9b9b',
+  },
+  D: {
+    emoji: '🎭', name: '他人軸タイプ', block: '「目立ったら叩かれる」',
+    desc: '人の反応や評価が気になりすぎて、本当の自分を出せていない。その優しさや共感力は素晴らしいけれど、「目立ったら何かされる」という恐れが、あなたを見えない檻に閉じ込めています。',
+    patterns: ['SNS発信で「どう思われるか」を気にしすぎて止まる','誰かに批判されると長時間ダメージを受ける','自分よりも相手の気持ちを優先してしまう','「いいね」の数で自分の発信価値を判断しがち'],
+    color: '#b87bb8',
+  },
+};
+
+// ===== 状態 =====
+let current = 0;
+let answers = new Array(30).fill(null);
+let lineUserId = '';
+let lineDisplayName = '';
+
+const choiceLabels = ['あてはまる', 'どちらでも', 'あてはまらない'];
+const choiceScores  = [2, 1, 0];
+
+// ===== LIFF初期化 =====
+async function initLiff() {
+  try {
+    await liff.init({ liffId: LIFF_ID });
+    if (!liff.isLoggedIn()) {
+      liff.login();
+      return;
+    }
+    const profile = await liff.getProfile();
+    lineUserId = profile.userId;
+    lineDisplayName = profile.displayName;
+
+    document.getElementById('user-name').textContent = `${lineDisplayName} さん`;
+    document.getElementById('loading').style.display = 'none';
+    document.getElementById('cover').style.display = 'flex';
+  } catch (e) {
+    console.error('LIFF init error:', e);
+    // 開発・テスト時はLIFF無しで動作
+    lineUserId = 'test_user';
+    lineDisplayName = 'テストユーザー';
+    document.getElementById('user-name').textContent = 'ようこそ！';
+    document.getElementById('loading').style.display = 'none';
+    document.getElementById('cover').style.display = 'flex';
+  }
+}
+
+// ===== Quiz =====
+function startQuiz() {
+  document.getElementById('cover').style.display = 'none';
+  document.getElementById('quiz').style.display = 'block';
+  renderQuestion();
+}
+
+function renderQuestion() {
+  const q = questions[current];
+  document.getElementById('q-section').textContent = q.section;
+  document.getElementById('q-text').textContent = q.text;
+  document.getElementById('progress-num').textContent = `${current + 1} / 30`;
+  document.getElementById('progress-fill').style.width = `${((current + 1) / 30) * 100}%`;
+  document.getElementById('nav-back').style.visibility = current === 0 ? 'hidden' : 'visible';
+  document.getElementById('nav-next').textContent = current === 29 ? '結果を見る 🎯' : '次へ →';
+
+  const saved = answers[current];
+  const choicesEl = document.getElementById('choices');
+  choicesEl.innerHTML = '';
+  choiceLabels.forEach((label, i) => {
+    const btn = document.createElement('button');
+    btn.className = 'choice-btn' + (saved === i ? ' selected' : '');
+    btn.innerHTML = `<div class="choice-dot"></div><span class="choice-label">${label}</span>`;
+    btn.onclick = () => selectChoice(i);
+    choicesEl.appendChild(btn);
+  });
+  updateNextBtn();
+
+  const qEl = document.querySelector('.quiz-question');
+  qEl.style.animation = 'none';
+  requestAnimationFrame(() => { qEl.style.animation = 'fadeUp 0.35s ease'; });
+}
+
+function selectChoice(i) {
+  answers[current] = i;
+  document.querySelectorAll('.choice-btn').forEach((btn, idx) => {
+    btn.classList.toggle('selected', idx === i);
+  });
+  updateNextBtn();
+}
+
+function updateNextBtn() {
+  document.getElementById('nav-next').classList.toggle('active', answers[current] !== null);
+}
+
+function nextQ() {
+  if (answers[current] === null) return;
+  if (current === 29) { submitResult(); return; }
+  current++;
+  renderQuestion();
+}
+
+function prevQ() {
+  if (current === 0) return;
+  current--;
+  renderQuestion();
+}
+
+// ===== スコア計算 =====
+function calcScores() {
+  const scores = { A: 0, B: 0, C: 0, D: 0 };
+  answers.forEach((ans, i) => {
+    if (ans !== null) scores[questions[i].type] += choiceScores[ans];
+  });
+  return scores;
+}
+
+// ===== GASに送信 =====
+async function submitResult() {
+  document.getElementById('quiz').style.display = 'none';
+  document.getElementById('sending').style.display = 'flex';
+
+  const scores = calcScores();
+  const winner = Object.entries(scores).reduce((a, b) => a[1] >= b[1] ? a : b)[0];
+
+  try {
+    await fetch(GAS_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        lineUserId,
+        lineDisplayName,
+        resultType: winner,
+        scores,
+        timestamp: new Date().toISOString(),
+      }),
+      mode: 'no-cors', // GASのCORS制限に対応
+    });
+  } catch (e) {
+    console.error('送信エラー（結果表示は続行）:', e);
+  }
+
+  setTimeout(() => {
+    document.getElementById('sending').style.display = 'none';
+    showResult(scores, winner);
+  }, 1800);
+}
+
+// ===== 結果表示 =====
+function showResult(scores, winner) {
+  document.getElementById('result').style.display = 'block';
+  const td = typeData[winner];
+
+  document.getElementById('result-hero').setAttribute('data-emoji', td.emoji);
+  document.getElementById('result-emoji').textContent = td.emoji;
+  document.getElementById('result-type-name').textContent = td.name;
+  document.getElementById('result-block-text').textContent = td.block;
+  document.getElementById('result-desc').textContent = td.desc;
+
+  const ul = document.getElementById('result-patterns');
+  ul.innerHTML = td.patterns.map(p => `<li>${p}</li>`).join('');
+
+  const maxScore = { A: 16, B: 14, C: 16, D: 14 };
+  const bars = document.getElementById('score-bars');
+  bars.innerHTML = ['A','B','C','D'].map(t => {
+    const d = typeData[t];
+    const pct = Math.round((scores[t] / maxScore[t]) * 100);
+    return `<div class="score-row">
+      <span class="score-emoji">${d.emoji}</span>
+      <span class="score-name">${d.name.replace('タイプ','')}</span>
+      <div class="score-track"><div class="score-fill" style="width:${pct}%;background:${d.color}"></div></div>
+      <span class="score-pct">${pct}%</span>
+    </div>`;
+  }).join('');
+
+  window.scrollTo(0, 0);
+}
+
+function retryQuiz() {
+  current = 0;
+  answers = new Array(30).fill(null);
+  document.getElementById('result').style.display = 'none';
+  document.getElementById('cover').style.display = 'flex';
+  window.scrollTo(0, 0);
+}
+
+// ===== 起動 =====
+initLiff();
+</script>
+</body>
+</html>
