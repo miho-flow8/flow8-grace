@@ -5,8 +5,6 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>稼げないブレーキ診断 | flow8-grace</title>
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700&family=Playfair+Display:ital@0;1&display=swap" rel="stylesheet">
-<!-- LIFF SDK -->
-<script src="https://static.line-sgi.com/liff/edge/versions/liff-2.22.3.js" defer></script>
 <style>
   :root {
     --off-white: #EFEBE0;
@@ -26,35 +24,9 @@
     overflow-x: hidden;
   }
 
-  /* ===== LOADING ===== */
-  #loading {
-    min-height: 100vh;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    background: linear-gradient(160deg, #1a1a1a 0%, #2a2320 100%);
-    gap: 20px;
-  }
-  .loading-logo {
-    font-family: 'Playfair Display', serif;
-    font-size: 28px;
-    color: var(--gold);
-    letter-spacing: 2px;
-  }
-  .loading-spinner {
-    width: 36px; height: 36px;
-    border: 3px solid rgba(196,168,130,0.2);
-    border-top-color: var(--gold);
-    border-radius: 50%;
-    animation: spin 0.8s linear infinite;
-  }
-  .loading-text { font-size: 13px; color: rgba(239,235,224,0.5); letter-spacing: 1px; }
-  @keyframes spin { to { transform: rotate(360deg); } }
-
   /* ===== COVER ===== */
   #cover {
-    display: none;
+    display: flex;
     min-height: 100vh;
     flex-direction: column;
     align-items: center;
@@ -85,14 +57,6 @@
     color: var(--off-white); text-align: center; line-height: 1.3; margin-bottom: 8px;
   }
   .cover-sub { font-size: 13px; color: var(--gold); text-align: center; letter-spacing: 1px; margin-bottom: 32px; }
-  .cover-welcome {
-    background: rgba(196,168,130,0.12);
-    border: 1px solid rgba(196,168,130,0.25);
-    border-radius: 16px; padding: 16px 20px;
-    margin-bottom: 28px; text-align: center; max-width: 320px; width: 100%;
-  }
-  .cover-welcome .name { font-size: 15px; color: var(--off-white); font-weight: 700; margin-bottom: 4px; }
-  .cover-welcome .sub { font-size: 12px; color: rgba(239,235,224,0.5); }
   .cover-desc {
     font-size: 14px; color: rgba(239,235,224,0.7);
     text-align: center; line-height: 1.9; max-width: 320px; margin-bottom: 36px;
@@ -212,13 +176,6 @@
   .result-type-name { font-family: 'Playfair Display', serif; font-size: clamp(26px, 7vw, 36px); color: var(--off-white); margin-bottom: 8px; }
   .result-block-label { font-size: 12px; color: var(--rose); letter-spacing: 2px; margin-bottom: 8px; margin-top: 24px; font-weight: 700; }
   .result-block-text { font-size: 20px; font-weight: 700; color: var(--gold); font-family: 'Playfair Display', serif; font-style: italic; }
-  .result-line-notice {
-    background: rgba(0,185,0,0.15); border: 1px solid rgba(0,185,0,0.3);
-    border-radius: 12px; padding: 14px 20px; margin-top: 28px;
-    display: inline-flex; align-items: center; gap: 10px;
-  }
-  .result-line-notice .icon { font-size: 20px; }
-  .result-line-notice .txt { font-size: 13px; color: #7fff7f; line-height: 1.5; text-align: left; }
   .result-body { padding: 40px 24px 60px; max-width: 480px; margin: 0 auto; }
   .result-desc-card {
     background: white; border-radius: 20px; padding: 28px 24px; margin-bottom: 24px;
@@ -246,6 +203,14 @@
   .score-track { flex: 1; height: 8px; background: #eee; border-radius: 8px; overflow: hidden; }
   .score-fill { height: 100%; border-radius: 8px; transition: width 1s ease 0.5s; }
   .score-pct { font-size: 12px; font-weight: 700; color: var(--text); width: 34px; text-align: right; }
+  .line-btn {
+    display: block; width: 100%; background: #06C755; border: none; border-radius: 50px;
+    padding: 18px; font-size: 16px; font-weight: 700; font-family: 'Noto Sans JP', sans-serif;
+    color: white; cursor: pointer; text-align: center; text-decoration: none;
+    margin-bottom: 16px; box-shadow: 0 8px 24px rgba(6,199,85,0.35);
+    transition: all 0.3s ease; letter-spacing: 1px;
+  }
+  .line-btn:hover { transform: translateY(-2px); box-shadow: 0 12px 32px rgba(6,199,85,0.45); }
   .retry-btn {
     width: 100%; background: none; border: 2px solid #ddd; border-radius: 50px;
     padding: 16px; font-size: 14px; font-family: 'Noto Sans JP', sans-serif;
@@ -253,6 +218,7 @@
   }
   .retry-btn:hover { border-color: var(--text); color: var(--text); }
 
+  @keyframes spin { to { transform: rotate(360deg); } }
   @keyframes fadeUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
   .fade-up { animation: fadeUp 0.5s ease forwards; }
   .quiz-question { animation: fadeUp 0.35s ease; }
@@ -260,22 +226,11 @@
 </head>
 <body>
 
-<!-- LOADING -->
-<div id="loading">
-  <div class="loading-logo">flow8-grace</div>
-  <div class="loading-spinner"></div>
-  <div class="loading-text">Loading...</div>
-</div>
-
 <!-- COVER -->
 <div id="cover">
   <div class="cover-badge">flow8-grace × 引き寄せ診断</div>
   <h1 class="cover-title">あなたの「稼げない<br>ブレーキ」診断</h1>
   <p class="cover-sub">30 Questions · 約5分</p>
-  <div class="cover-welcome">
-    <div class="name" id="user-name">ようこそ！</div>
-    <div class="sub">LINEアカウントで参加中</div>
-  </div>
   <p class="cover-desc">頑張っているのに結果が出ない。<br>その理由は行動量じゃなくて<br><strong style="color:var(--gold)">心の奥にあるブロック</strong>かもしれない。</p>
   <div class="types-preview">
     <div class="type-chip"><span class="emoji">🔥</span><span class="name">行動過多タイプ</span></div>
@@ -315,7 +270,7 @@
 <div id="sending">
   <div class="sending-spinner"></div>
   <div class="sending-text">結果を解析中...</div>
-  <div class="sending-sub">LINEに結果をお届けします</div>
+  <div class="sending-sub">しばらくお待ちください</div>
 </div>
 
 <!-- RESULT -->
@@ -326,10 +281,6 @@
     <div class="result-type-name" id="result-type-name"></div>
     <div class="result-block-label">あなたのブロック</div>
     <div class="result-block-text" id="result-block-text"></div>
-    <div class="result-line-notice">
-      <span class="icon">💬</span>
-      <div class="txt">詳細な結果＋Step1案内を<br>LINEにお届けしました！</div>
-    </div>
   </div>
   <div class="result-body">
     <div class="result-desc-card fade-up">
@@ -344,15 +295,15 @@
       <h3>タイプ別スコア</h3>
       <div id="score-bars"></div>
     </div>
+    <button class="line-btn" onclick="onLineButtonClick()">LINEで結果を受け取る 💬</button>
     <button class="retry-btn" onclick="retryQuiz()">もう一度診断する</button>
   </div>
 </div>
 
 <script>
 // ===== CONFIG =====
-// ⚠️ 以下2つをデプロイ時に置き換えてください
-const LIFF_ID = '2009876243-F8J6o2J1';          // LINE DevelopersのLIFF ID
-const GAS_URL = 'https://script.google.com/macros/s/AKfycbxqT3wYwO0qNn4hUI-2Aw024svpFd9CGtIKTqQ4RLCvNwpE6Xif3lCIanEQB0Qch_CN/exec';   // GASのウェブアプリURL
+const GAS_URL = 'https://script.google.com/macros/s/AKfycbxqT3wYwO0qNn4hUI-2Aw024svpFd9CGtIKTqQ4RLCvNwpE6Xif3lCIanEQB0Qch_CN/exec';
+const LINE_ACCOUNT_ID = '@アカウントID';
 
 // ===== 質問データ =====
 const questions = [
@@ -422,46 +373,11 @@ const typeData = {
 // ===== 状態 =====
 let current = 0;
 let answers = new Array(30).fill(null);
-let lineUserId = '';
-let lineDisplayName = '';
+let resultWinner = null;
+let resultScores = null;
 
 const choiceLabels = ['あてはまる', 'どちらでも', 'あてはまらない'];
 const choiceScores  = [2, 1, 0];
-
-// ===== LIFF初期化 =====
-async function initLiff() {
-  try {
-    await liff.init({ liffId: LIFF_ID });
-
-    if (!liff.isLoggedIn()) {
-      liff.login();
-      return;
-    }
-
-    // アクセストークン確認
-    const token = liff.getAccessToken();
-    console.log('accessToken:', token ? token.substring(0, 20) + '...' : 'null');
-
-    const profile = await liff.getProfile();
-    console.log('profile:', JSON.stringify(profile));
-
-    lineUserId = profile.userId;
-    lineDisplayName = profile.displayName;
-
-    document.getElementById('user-name').textContent = `${lineDisplayName} さん`;
-    document.getElementById('loading').style.display = 'none';
-    document.getElementById('cover').style.display = 'flex';
-
-  } catch (e) {
-    console.error('LIFF init error:', e);
-    alert('LIFFエラー: ' + e.message);
-    lineUserId = 'test_user_' + Date.now();
-    lineDisplayName = 'ゲスト';
-    document.getElementById('user-name').textContent = 'ゲスト';
-    document.getElementById('loading').style.display = 'none';
-    document.getElementById('cover').style.display = 'flex';
-  }
-}
 
 // ===== Quiz =====
 function startQuiz() {
@@ -530,34 +446,36 @@ function calcScores() {
   return scores;
 }
 
-// ===== GASに送信 =====
-async function submitResult() {
+// ===== 結果画面へ遷移 =====
+function submitResult() {
   document.getElementById('quiz').style.display = 'none';
   document.getElementById('sending').style.display = 'flex';
 
-  const scores = calcScores();
-  const winner = Object.entries(scores).reduce((a, b) => a[1] >= b[1] ? a : b)[0];
+  resultScores = calcScores();
+  resultWinner = Object.entries(resultScores).reduce((a, b) => a[1] >= b[1] ? a : b)[0];
 
+  setTimeout(() => {
+    document.getElementById('sending').style.display = 'none';
+    showResult(resultScores, resultWinner);
+  }, 1800);
+}
+
+// ===== LINEボタンタップ時：GAS送信 → LINE誘導 =====
+async function onLineButtonClick() {
   try {
     await fetch(GAS_URL, {
       method: 'POST',
       headers: { 'Content-Type': 'text/plain' },
       body: JSON.stringify({
-        lineUserId,
-        lineDisplayName,
-        resultType: winner,
-        scores,
+        resultType: resultWinner,
+        scores: resultScores,
         timestamp: new Date().toISOString(),
       }),
     });
   } catch (e) {
-    console.error('送信エラー（結果表示は続行）:', e);
+    console.error('GAS送信エラー:', e);
   }
-
-  setTimeout(() => {
-    document.getElementById('sending').style.display = 'none';
-    showResult(scores, winner);
-  }, 1800);
+  window.open('https://line.me/R/oaMessage/' + LINE_ACCOUNT_ID, '_blank');
 }
 
 // ===== 結果表示 =====
@@ -593,13 +511,12 @@ function showResult(scores, winner) {
 function retryQuiz() {
   current = 0;
   answers = new Array(30).fill(null);
+  resultWinner = null;
+  resultScores = null;
   document.getElementById('result').style.display = 'none';
   document.getElementById('cover').style.display = 'flex';
   window.scrollTo(0, 0);
 }
-
-// ===== 起動 =====
-initLiff();
 </script>
 </body>
 </html>
